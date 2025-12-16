@@ -13,9 +13,9 @@ import * as packageJson from '../package.json';
 import * as process from 'process';
 import { IAppConfig } from '@config/app';
 import { ValidationError } from '@domain/errors';
-import { getLoggerLevels } from '@libs/helpers';
 import { Environment, ErrorCode, ERRORS } from '@domain/types';
 import { AppModule } from '@infrastructure/modules';
+import { getLoggerLevels } from '@libs/helpers';
 import { HttpExceptionFilter } from '@infrastructure/filters';
 
 
