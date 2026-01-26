@@ -12,7 +12,7 @@ export class TableTypeormEntity extends BaseEntity implements ITable {
   id!: number;
 
   @Column({name:'last_name', nullable: true, type: 'varchar'})
-  lastName!: string;
+  name!: string;
 
   @CreateDateColumn()
   createdAt!: Date;

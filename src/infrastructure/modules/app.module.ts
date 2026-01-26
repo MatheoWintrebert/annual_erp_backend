@@ -10,7 +10,7 @@ import { HealthcheckController } from '@infrastructure/controllers';
 import { AppLoggerMiddleware } from '@infrastructure/middlewares';
 import { TableTypeormEntity } from '@infrastructure/entities/table.typeorm.entity';
 import { Environment } from '@domain/types';
-import { SnakeCaseNamingStrategy } from '@libs/helpers/snake-case-naming-strategy.helper';
+import { SnakeCaseNamingStrategy } from '@libs/helpers';
 
 const entities = [
   TableTypeormEntity,

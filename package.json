@@ -17,7 +17,13 @@
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./test/jest-e2e.json"
+    "test:e2e": "jest --config ./test/jest-e2e.json",
+    "migration:run": "NODE_ENV=local yarn typeorm migration:run -- -d ./ormconfig.ts",
+    "migration:run:prod": "NODE_ENV=production ts-node -r module-alias/register -r tsconfig-paths/register ./node_modules/typeorm/cli.js migration:run -d ./dist/ormconfig.js",
+    "migration:generate": "NODE_ENV=local yarn typeorm -- -d ./ormconfig.ts migration:generate ./src/migrations/$npm_config_name",
+    "migration:make": "NODE_ENV=local yarn typeorm -- migration:create ./src/migrations/$npm_config_name",
+    "migration:revert": "NODE_ENV=local yarn typeorm -- -d ./ormconfig.ts migration:revert",
+    "migration:revert:prod": "NODE_ENV=production yarn typeorm -- -d ./ormconfig.ts migration:revert"
   },
   "dependencies": {
     "@nestjs/axios": "^4.0.1",
@@ -33,6 +39,7 @@
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.3",
     "config": "^4.1.1",
+    "module-alias": "^2.2.3",
     "nest-commander": "^3.20.1",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.1",
