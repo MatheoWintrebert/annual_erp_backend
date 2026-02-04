@@ -1,1 +1,1 @@
-export * from './http-error.dto';
+export * from "./http-error.dto";

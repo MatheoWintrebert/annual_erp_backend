@@ -1,1 +1,4 @@
-export * from './general';
+export * from "./general";
+export * from "./company-settings";
+export * from "./palettier";
+export * from "./palettier-type";

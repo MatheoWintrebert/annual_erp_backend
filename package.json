@@ -18,12 +18,12 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
-    "migration:run": "NODE_ENV=local yarn typeorm migration:run -- -d ./ormconfig.ts",
+    "migration:run": "NODE_ENV=local ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js migration:run -d ./ormconfig.ts",
     "migration:run:prod": "NODE_ENV=production ts-node -r module-alias/register -r tsconfig-paths/register ./node_modules/typeorm/cli.js migration:run -d ./dist/ormconfig.js",
-    "migration:generate": "NODE_ENV=local yarn typeorm -- -d ./ormconfig.ts migration:generate ./src/migrations/$npm_config_name",
-    "migration:make": "NODE_ENV=local yarn typeorm -- migration:create ./src/migrations/$npm_config_name",
-    "migration:revert": "NODE_ENV=local yarn typeorm -- -d ./ormconfig.ts migration:revert",
-    "migration:revert:prod": "NODE_ENV=production yarn typeorm -- -d ./ormconfig.ts migration:revert"
+    "migration:generate": "NODE_ENV=local ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js migration:generate -d ./ormconfig.ts ./src/migrations/$npm_config_name",
+    "migration:make": "NODE_ENV=local ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js migration:create ./src/migrations/$npm_config_name",
+    "migration:revert": "NODE_ENV=local ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js migration:revert -d ./ormconfig.ts",
+    "migration:revert:prod": "NODE_ENV=production ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js migration:revert -d ./ormconfig.ts"
   },
   "dependencies": {
     "@nestjs/axios": "^4.0.1",
@@ -40,6 +40,7 @@
     "class-validator": "^0.14.3",
     "config": "^4.1.1",
     "module-alias": "^2.2.3",
+    "mysql2": "^3.16.2",
     "nest-commander": "^3.20.1",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.1",
@@ -87,6 +88,13 @@
       "**/*.(t|j)s"
     ],
     "coverageDirectory": "../coverage",
-    "testEnvironment": "node"
+    "testEnvironment": "node",
+    "moduleNameMapper": {
+      "^@application/(.*)$": "<rootDir>/application/$1",
+      "^@config/(.*)$": "<rootDir>/config/$1",
+      "^@domain/(.*)$": "<rootDir>/domain/$1",
+      "^@infrastructure/(.*)$": "<rootDir>/infrastructure/$1",
+      "^@libs/(.*)$": "<rootDir>/libs/$1"
+    }
   }
 }

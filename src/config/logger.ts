@@ -1,11 +1,11 @@
-import { IsEnum } from 'class-validator';
+import { IsEnum } from "class-validator";
 
 export enum LogLevel {
-  VERBOSE = 'verbose',
-  DEBUG = 'debug',
-  INFO = 'info',
-  WARN = 'warn',
-  ERROR = 'error',
+  VERBOSE = "verbose",
+  DEBUG = "debug",
+  INFO = "info",
+  WARN = "warn",
+  ERROR = "error",
 }
 
 export interface ILoggerConfig {

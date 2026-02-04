@@ -1,18 +1,16 @@
-
-import { ErrorCode, HttpResponseStatus } from '@domain/types';
-
+import { ErrorCode, HttpResponseStatus } from "@domain/types";
 
 export interface BaseErrorOptions {
   httpStatus: HttpResponseStatus;
   code?: ErrorCode;
-  details?: Record<string, any>;
+  details?: Record<string, unknown>;
 }
 
 export abstract class BaseError extends Error {
   public readonly message: string;
   public readonly httpStatus: HttpResponseStatus;
   public readonly code: ErrorCode;
-  public readonly details: Record<string, any>;
+  public readonly details: Record<string, unknown>;
 
   constructor(message: string, options: BaseErrorOptions) {
     super(message);

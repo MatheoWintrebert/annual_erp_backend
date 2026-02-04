@@ -1,7 +1,10 @@
-import { plainToClass } from 'class-transformer';
-import { validateSync } from 'class-validator';
+import { plainToClass } from "class-transformer";
+import { validateSync } from "class-validator";
 
-export function validate<K, T extends object>(config: K, ValidationClass: new () => T): T {
+export function validate<T extends object>(
+  config: Record<string, unknown>,
+  ValidationClass: new () => T
+): T {
   const validatedConfig = plainToClass(ValidationClass, config, {
     enableImplicitConversion: true,
   });
