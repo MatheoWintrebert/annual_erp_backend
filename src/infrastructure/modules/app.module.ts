@@ -11,9 +11,17 @@ import { AppLoggerMiddleware } from '@infrastructure/middlewares';
 import { TableTypeormEntity } from '@infrastructure/entities/table.typeorm.entity';
 import { Environment } from '@domain/types';
 import { SnakeCaseNamingStrategy } from '@libs/helpers';
+import { UserRepository } from '@domain/repositories';
+import { UserMysqlRepository } from '@infrastructure/repositories';
+import { LoginUseCase } from '@application/use-cases';
+import { RegisterUseCase } from '@application/use-cases/auth/register/register.use-case';
+import AuthConfiguration from './auth.configuration';
+import { UserTypeormEntity } from '@infrastructure/entities';
+import UserConfiguration from './user.configuration';
 
 const entities = [
   TableTypeormEntity,
+  UserTypeormEntity,
 ]
 
 @Module({
@@ -37,8 +45,12 @@ const entities = [
   ],
   controllers: [
     HealthcheckController,
+    ...(AuthConfiguration.controllers ?? []),
+    ...(UserConfiguration.controllers ?? []),
   ],
   providers: [
+    ...(AuthConfiguration.providers ?? []),
+    ...(UserConfiguration.providers ?? []),
   ],
 })
 export class AppModule {

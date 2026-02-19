@@ -3,10 +3,12 @@ import {
   BaseEntity,
   Column,
   CreateDateColumn,
+  Entity,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 
+@Entity()
 export class TableTypeormEntity extends BaseEntity implements ITable {
   @PrimaryGeneratedColumn()
   id!: number;
