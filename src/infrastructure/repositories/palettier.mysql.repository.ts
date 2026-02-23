@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { EntityManager, Repository } from "typeorm";
+import { EntityManager, In, Repository } from "typeorm";
 import { PalettierEntity } from "@domain/entities";
 import { NotFoundError } from "@domain/errors";
 import {
@@ -8,13 +8,18 @@ import {
   PalettierRepository,
   UpdatePalettierData,
 } from "@domain/repositories";
-import { PalettierTypeormEntity } from "@infrastructure/entities";
+import {
+  PalettierTypeormEntity,
+  PaletteTypeormEntity,
+} from "@infrastructure/entities";
 
 @Injectable()
 export class PalettierMysqlRepository implements PalettierRepository {
   constructor(
     @InjectRepository(PalettierTypeormEntity)
-    private readonly repository: Repository<PalettierTypeormEntity>
+    private readonly repository: Repository<PalettierTypeormEntity>,
+    @InjectRepository(PaletteTypeormEntity)
+    private readonly paletteRepository: Repository<PaletteTypeormEntity>
   ) {}
 
   async findById(id: number): Promise<PalettierEntity | null> {
@@ -25,6 +30,16 @@ export class PalettierMysqlRepository implements PalettierRepository {
     }
 
     return this.toDomainEntity(entity);
+  }
+
+  async findByIds(ids: number[]): Promise<PalettierEntity[]> {
+    if (ids.length === 0) return [];
+
+    const entities = await this.repository.find({
+      where: { id: In(ids) },
+    });
+
+    return entities.map((entity) => this.toDomainEntity(entity));
   }
 
   async findAll(): Promise<PalettierEntity[]> {
@@ -105,6 +120,59 @@ export class PalettierMysqlRepository implements PalettierRepository {
 
     const saved = await this.repository.save(entity);
     return this.toDomainEntity(saved);
+  }
+
+  async delete(id: number): Promise<void> {
+    const entity = await this.repository.findOne({ where: { id } });
+
+    if (!entity) {
+      throw new NotFoundError(`Palettier with ID ${String(id)}`);
+    }
+
+    await this.repository.softRemove(entity);
+  }
+
+  async countPalettesByPalettierId(id: number): Promise<number> {
+    return this.paletteRepository.count({
+      where: { palettierId: id },
+    });
+  }
+
+  async countPalettesByPalettierIds(
+    ids: number[]
+  ): Promise<Map<number, number>> {
+    if (ids.length === 0) return new Map();
+
+    const counts = await this.paletteRepository
+      .createQueryBuilder("palette")
+      .select("palette.palettier_id", "palettierId")
+      .addSelect("COUNT(*)", "count")
+      .where("palette.palettier_id IN (:...ids)", { ids })
+      .groupBy("palette.palettier_id")
+      .getRawMany<{ palettierId: number; count: string }>();
+
+    const map = new Map<number, number>();
+    for (const row of counts) {
+      map.set(row.palettierId, Number(row.count));
+    }
+    return map;
+  }
+
+  async getCapacitySummary(): Promise<{
+    count: number;
+    totalCapacity: number;
+  }> {
+    const result = await this.repository
+      .createQueryBuilder("palettier")
+      .select("COUNT(*)", "count")
+      .addSelect("COALESCE(SUM(palettier.width * palettier.depth * palettier.height), 0)", "totalCapacity")
+      .where("palettier.deletedAt IS NULL")
+      .getRawOne<{ count: string; totalCapacity: string }>();
+
+    return {
+      count: Number(result?.count ?? 0),
+      totalCapacity: Number(result?.totalCapacity ?? 0),
+    };
   }
 
   private toDomainEntity(entity: PalettierTypeormEntity): PalettierEntity {

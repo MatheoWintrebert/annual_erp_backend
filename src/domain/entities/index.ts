@@ -13,3 +13,6 @@ export * from "./rule-zone-priority-config.entity";
 export * from "./rule-product-incompatibility-config.entity";
 export * from "./rule-storage-condition-config.entity";
 export * from "./rule-placement-constraint-config.entity";
+export * from "./category.entity";
+export * from "./picking-list.entity";
+export * from "./picking-list-item.entity";

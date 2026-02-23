@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   HttpCode,
   HttpStatus,
@@ -18,6 +19,7 @@ import {
 } from "@nestjs/swagger";
 import {
   CreatePalettiersUseCase,
+  DeletePalettierUseCase,
   GetPalettierByIdUseCase,
   GetPalettiersUseCase,
   UpdatePalettierUseCase,
@@ -30,6 +32,7 @@ import {
 } from "@infrastructure/dto";
 import { HttpErrorDto } from "@infrastructure/dto/general";
 import { createSwaggerErrorCodesDescription, ErrorCode } from "@domain/types";
+import { PalettierRepository } from "@domain/repositories";
 
 @ApiTags("Palettiers")
 @Controller({ path: "palettiers" })
@@ -38,7 +41,9 @@ export class PalettierController {
     private readonly createPalettiersUseCase: CreatePalettiersUseCase,
     private readonly getPalettiersUseCase: GetPalettiersUseCase,
     private readonly getPalettierByIdUseCase: GetPalettierByIdUseCase,
-    private readonly updatePalettierUseCase: UpdatePalettierUseCase
+    private readonly updatePalettierUseCase: UpdatePalettierUseCase,
+    private readonly deletePalettierUseCase: DeletePalettierUseCase,
+    private readonly palettierRepository: PalettierRepository
   ) {}
 
   @Get()
@@ -54,8 +59,16 @@ export class PalettierController {
   })
   async getPalettiers(): Promise<PalettierResponseDto[]> {
     const palettiers = await this.getPalettiersUseCase.execute();
+
+    const ids = palettiers.map((p) => p.id);
+    const countMap =
+      await this.palettierRepository.countPalettesByPalettierIds(ids);
+
     return palettiers.map((palettier) =>
-      PalettierResponseDto.fromEntity(palettier)
+      PalettierResponseDto.fromEntity(
+        palettier,
+        countMap.get(palettier.id) ?? 0
+      )
     );
   }
 
@@ -86,7 +99,9 @@ export class PalettierController {
     @Param("id", ParseIntPipe) id: number
   ): Promise<PalettierResponseDto> {
     const palettier = await this.getPalettierByIdUseCase.execute({ id });
-    return PalettierResponseDto.fromEntity(palettier);
+    const paletteCount =
+      await this.palettierRepository.countPalettesByPalettierId(id);
+    return PalettierResponseDto.fromEntity(palettier, paletteCount);
   }
 
   @Post()
@@ -181,5 +196,73 @@ export class PalettierController {
     });
 
     return PalettierResponseDto.fromEntity(palettier);
+  }
+
+  @Delete(":id")
+  @HttpCode(HttpStatus.NO_CONTENT)
+  @ApiOperation({
+    summary: "Delete a palettier",
+    description:
+      "Soft deletes a palettier. Deletion is blocked if the palettier still contains palettes.",
+  })
+  @ApiParam({
+    name: "id",
+    type: Number,
+    description: "The unique identifier of the palettier to delete",
+  })
+  @ApiResponse({
+    status: HttpStatus.NO_CONTENT,
+    description: "Palettier deleted successfully",
+  })
+  @ApiResponse({
+    status: HttpStatus.BAD_REQUEST,
+    description: createSwaggerErrorCodesDescription([
+      ErrorCode.DELETION_BLOCKED_PALETTES_EXIST,
+    ]),
+    type: HttpErrorDto,
+  })
+  @ApiResponse({
+    status: HttpStatus.NOT_FOUND,
+    description: createSwaggerErrorCodesDescription([
+      ErrorCode.RESOURCE_NOT_FOUND,
+    ]),
+    type: HttpErrorDto,
+  })
+  async deletePalettier(@Param("id", ParseIntPipe) id: number): Promise<void> {
+    await this.deletePalettierUseCase.execute({ id });
+  }
+
+  @Get(":id/palette-count")
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({
+    summary: "Get palette count for a palettier",
+    description:
+      "Returns the number of palettes currently stored in the specified palettier.",
+  })
+  @ApiParam({
+    name: "id",
+    type: Number,
+    description: "The unique identifier of the palettier",
+  })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: "Palette count retrieved successfully",
+  })
+  @ApiResponse({
+    status: HttpStatus.NOT_FOUND,
+    description: createSwaggerErrorCodesDescription([
+      ErrorCode.RESOURCE_NOT_FOUND,
+    ]),
+    type: HttpErrorDto,
+  })
+  async getPaletteCount(
+    @Param("id", ParseIntPipe) id: number
+  ): Promise<{ paletteCount: number; occupiedPositions: number }> {
+    await this.getPalettierByIdUseCase.execute({ id });
+
+    const paletteCount =
+      await this.palettierRepository.countPalettesByPalettierId(id);
+
+    return { paletteCount, occupiedPositions: paletteCount };
   }
 }

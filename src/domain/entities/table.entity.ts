@@ -1,11 +1,11 @@
 import { ITable } from "@domain/types";
 
 export class TableEntity {
-  public id!: number;
-  public name!: string;
+  public id: number | null;
+  public name: string | null;
 
   constructor(params: ITable) {
-    this.id = params.id!;
-    this.name = params.name!;
+    this.id = params.id;
+    this.name = params.name;
   }
 }

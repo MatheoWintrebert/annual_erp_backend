@@ -20,6 +20,8 @@ export interface UpdatePalettierData {
 export abstract class PalettierRepository {
   abstract findById(id: number): Promise<PalettierEntity | null>;
 
+  abstract findByIds(ids: number[]): Promise<PalettierEntity[]>;
+
   abstract findAll(): Promise<PalettierEntity[]>;
 
   abstract create(
@@ -36,4 +38,17 @@ export abstract class PalettierRepository {
     id: number,
     data: UpdatePalettierData
   ): Promise<PalettierEntity>;
+
+  abstract delete(id: number): Promise<void>;
+
+  abstract countPalettesByPalettierId(id: number): Promise<number>;
+
+  abstract countPalettesByPalettierIds(
+    ids: number[]
+  ): Promise<Map<number, number>>;
+
+  abstract getCapacitySummary(): Promise<{
+    count: number;
+    totalCapacity: number;
+  }>;
 }

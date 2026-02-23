@@ -32,7 +32,22 @@ export class PalettierResponseDto {
   @ApiProperty({ example: "2024-01-20T14:45:00.000Z" })
   updatedAt!: Date;
 
-  static fromEntity(entity: PalettierEntity): PalettierResponseDto {
+  @ApiProperty({
+    example: 0,
+    description: "Number of palettes currently in this palettier",
+  })
+  paletteCount!: number;
+
+  @ApiProperty({
+    example: 0,
+    description: "Number of positions currently occupied",
+  })
+  occupiedPositions!: number;
+
+  static fromEntity(
+    entity: PalettierEntity,
+    paletteCount = 0
+  ): PalettierResponseDto {
     const dto = new PalettierResponseDto();
     dto.id = entity.id;
     dto.name = entity.name;
@@ -43,6 +58,8 @@ export class PalettierResponseDto {
     dto.totalCapacity = entity.totalCapacity;
     dto.createdAt = entity.createdAt;
     dto.updatedAt = entity.updatedAt;
+    dto.paletteCount = paletteCount;
+    dto.occupiedPositions = paletteCount;
     return dto;
   }
 }

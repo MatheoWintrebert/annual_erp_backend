@@ -13,3 +13,6 @@ export * from "./rule-zone-priority-config.typeorm.entity";
 export * from "./rule-product-incompatibility-config.typeorm.entity";
 export * from "./rule-storage-condition-config.typeorm.entity";
 export * from "./rule-placement-constraint-config.typeorm.entity";
+export * from "./category.typeorm.entity";
+export * from "./picking-list.typeorm.entity";
+export * from "./picking-list-item.typeorm.entity";

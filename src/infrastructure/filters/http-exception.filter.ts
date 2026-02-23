@@ -19,16 +19,21 @@ export class HttpExceptionFilter implements ExceptionFilter {
     const response = ctx.getResponse<Response>();
 
     let httpStatusCode: number = HttpResponseStatus.INTERNAL_SERVER_ERROR;
-    let message =
-      process.env.NODE_ENV === Environment.Production
-        ? "Internal Server Error"
-        : `Error: ${exception.message} \n Stack: ${String(exception.stack)}`;
+    let message: string;
     let code: ErrorCode = ErrorCode.INTERNAL_SERVER_ERROR;
-    let details: Record<string, unknown> = {
-      name: exception.name,
-      error: exception.message,
-      stack: String(exception.stack),
-    };
+    let details: Record<string, unknown>;
+
+    if (process.env.NODE_ENV === Environment.Production) {
+      message = "Internal Server Error";
+      details = {};
+    } else {
+      message = `Error: ${exception.message} \n Stack: ${String(exception.stack)}`;
+      details = {
+        name: exception.name,
+        error: exception.message,
+        stack: String(exception.stack),
+      };
+    }
 
     /**
      * if exception is instance of domain BaseError
@@ -46,6 +51,8 @@ export class HttpExceptionFilter implements ExceptionFilter {
     if (exception instanceof HttpException) {
       httpStatusCode = exception.getStatus();
       message = exception.message;
+      code = httpStatusCode === 404 ? ErrorCode.RESOURCE_NOT_FOUND : code;
+      details = {};
     }
 
     if (httpStatusCode >= 500) {
@@ -55,6 +62,7 @@ export class HttpExceptionFilter implements ExceptionFilter {
     }
 
     const responseBody: HttpErrorDto = {
+      statusCode: httpStatusCode,
       message,
       code,
       details,

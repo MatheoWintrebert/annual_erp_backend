@@ -3,6 +3,13 @@ import { ErrorCode } from "@domain/types";
 
 export class HttpErrorDto {
   @ApiProperty({
+    type: Number,
+    description: "The HTTP status code",
+    example: 400,
+  })
+  statusCode!: number;
+
+  @ApiProperty({
     type: String,
     description: "The cause of the error",
     example: "Error message",

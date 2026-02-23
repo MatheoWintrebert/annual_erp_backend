@@ -14,3 +14,8 @@ export * from "./palette-lot";
 export * from "./rule";
 export * from "./product-rule";
 export * from "./rule-configs";
+export * from "./category";
+export * from "./placement";
+export * from "./stock";
+export * from "./picking-list";
+export * from "./dashboard";

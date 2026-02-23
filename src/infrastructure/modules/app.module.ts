@@ -1,4 +1,5 @@
-import { MiddlewareConsumer, Module } from "@nestjs/common";
+import { MiddlewareConsumer, Module, type Provider } from "@nestjs/common";
+import { APP_GUARD } from "@nestjs/core";
 import { ConfigModule, ConfigService } from "@nestjs/config";
 import { ScheduleModule } from "@nestjs/schedule";
 import { TypeOrmModule, TypeOrmModuleOptions } from "@nestjs/typeorm";
@@ -12,6 +13,14 @@ import {
   PalettierController,
   PalettierTypeController,
 } from "@infrastructure/controllers";
+import { RuleModule } from "./rule.module";
+import { ProductModule } from "./product.module";
+import { CategoryModule } from "./category.module";
+import { UnitOfMeasureModule } from "./unit-of-measure.module";
+import { IntakeModule } from "./intake.module";
+import { StockModule } from "./stock.module";
+import { PickingModule } from "./picking.module";
+import { DashboardModule } from "./dashboard.module";
 import { AppLoggerMiddleware } from "@infrastructure/middlewares";
 import {
   CompanySettingsTypeormEntity,
@@ -22,6 +31,7 @@ import {
   PalettierTypeTypeormEntity,
   ProductRuleTypeormEntity,
   ProductTypeormEntity,
+  CategoryTypeormEntity,
   RulePlacementConstraintConfigTypeormEntity,
   RuleProductIncompatibilityConfigTypeormEntity,
   RuleStorageConditionConfigTypeormEntity,
@@ -31,6 +41,8 @@ import {
   RuleZonePriorityPalettierTypeormEntity,
   TableTypeormEntity,
   UnitOfMeasureTypeormEntity,
+  PickingListTypeormEntity,
+  PickingListItemTypeormEntity,
 } from "@infrastructure/entities";
 import {
   CompanySettingsMysqlRepository,
@@ -45,6 +57,7 @@ import {
 import {
   CreatePalettiersUseCase,
   CreatePalettierTypeUseCase,
+  DeletePalettierUseCase,
   GetCompanySettingsUseCase,
   GetPalettierByIdUseCase,
   GetPalettierTypeByIdUseCase,
@@ -56,6 +69,7 @@ import {
 } from "@application/use-cases";
 import { Environment } from "@domain/types";
 import { SnakeCaseNamingStrategy } from "@libs/helpers";
+import { AuthGuard } from "@infrastructure/guards";
 
 const entities = [
   TableTypeormEntity,
@@ -75,6 +89,9 @@ const entities = [
   RuleStorageConditionConfigTypeormEntity,
   RuleStorageConditionPalettierTypeormEntity,
   RulePlacementConstraintConfigTypeormEntity,
+  CategoryTypeormEntity,
+  PickingListTypeormEntity,
+  PickingListItemTypeormEntity,
 ];
 
 @Module({
@@ -95,6 +112,14 @@ const entities = [
     JwtModule,
     ScheduleModule.forRoot(),
     HttpModule,
+    RuleModule,
+    ProductModule,
+    CategoryModule,
+    UnitOfMeasureModule,
+    IntakeModule,
+    StockModule,
+    PickingModule,
+    DashboardModule,
   ],
   controllers: [
     HealthcheckController,
@@ -121,10 +146,12 @@ const entities = [
     GetPalettiersUseCase,
     GetPalettierByIdUseCase,
     UpdatePalettierUseCase,
+    DeletePalettierUseCase,
     CreatePalettierTypeUseCase,
     GetPalettierTypesUseCase,
     GetPalettierTypeByIdUseCase,
     UpdatePalettierTypeUseCase,
+    { provide: APP_GUARD, useClass: AuthGuard } satisfies Provider,
   ],
 })
 export class AppModule {

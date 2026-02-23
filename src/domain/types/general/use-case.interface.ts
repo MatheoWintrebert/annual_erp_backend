@@ -5,3 +5,5 @@ interface UseCase<Input, Output> {
 export type QueryUseCase<Input, Output> = UseCase<Input, Output>;
 
 export type CommandUseCase<Input> = UseCase<Input, void>;
+
+export type MutationUseCase<Input, Output> = UseCase<Input, Output>;

@@ -7,7 +7,7 @@ import { Environment } from '@domain/types';
 
 config();
 
-ConfigModule.forRoot({
+void ConfigModule.forRoot({
   envFilePath: `.env.ormconfig`,
 });
 

@@ -13,6 +13,7 @@ import {
   UpdateDateColumn,
 } from "typeorm";
 import { UnitOfMeasureTypeormEntity } from "./unit-of-measure.typeorm.entity";
+import { CategoryTypeormEntity } from "./category.typeorm.entity";
 import { LotTypeormEntity } from "./lot.typeorm.entity";
 import { ProductRuleTypeormEntity } from "./product-rule.typeorm.entity";
 
@@ -31,6 +32,9 @@ export class ProductTypeormEntity extends BaseEntity implements IProduct {
   @Column({ name: "unit_of_measure_id", type: "int" })
   unitOfMeasureId!: number;
 
+  @Column({ name: "category_id", type: "int", nullable: true })
+  categoryId!: number | null;
+
   @Column({
     name: "minimum_stock",
     type: "decimal",
@@ -39,6 +43,13 @@ export class ProductTypeormEntity extends BaseEntity implements IProduct {
     nullable: true,
   })
   minimumStock!: number | null;
+
+  @Column({
+    name: "expiry_alert_threshold",
+    type: "int",
+    nullable: true,
+  })
+  expiryAlertThreshold!: number | null;
 
   @CreateDateColumn({ name: "created_at" })
   createdAt!: Date;
@@ -52,6 +63,12 @@ export class ProductTypeormEntity extends BaseEntity implements IProduct {
   @ManyToOne(() => UnitOfMeasureTypeormEntity, (unit) => unit.products)
   @JoinColumn({ name: "unit_of_measure_id" })
   unitOfMeasure!: UnitOfMeasureTypeormEntity;
+
+  @ManyToOne(() => CategoryTypeormEntity, (category) => category.products, {
+    nullable: true,
+  })
+  @JoinColumn({ name: "category_id" })
+  category!: CategoryTypeormEntity | null;
 
   @OneToMany(() => LotTypeormEntity, (lot) => lot.product)
   lots!: LotTypeormEntity[];

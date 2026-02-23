@@ -5,11 +5,13 @@ import {
   CreateDateColumn,
   Entity,
   JoinColumn,
+  ManyToOne,
   OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
 import { RuleTypeormEntity } from "./rule.typeorm.entity";
+import { CategoryTypeormEntity } from "./category.typeorm.entity";
 
 @Entity("rule_product_incompatibility_config")
 export class RuleProductIncompatibilityConfigTypeormEntity
@@ -22,8 +24,8 @@ export class RuleProductIncompatibilityConfigTypeormEntity
   @Column({ name: "rule_id", type: "int", unique: true })
   ruleId!: number;
 
-  @Column({ type: "varchar", length: 100 })
-  category!: string;
+  @Column({ name: "category_id", type: "int" })
+  categoryId!: number;
 
   @Column({ name: "minimum_distance", type: "int" })
   minimumDistance!: number;
@@ -40,4 +42,11 @@ export class RuleProductIncompatibilityConfigTypeormEntity
   )
   @JoinColumn({ name: "rule_id" })
   rule!: RuleTypeormEntity;
+
+  @ManyToOne(
+    () => CategoryTypeormEntity,
+    (category) => category.productIncompatibilityConfigs
+  )
+  @JoinColumn({ name: "category_id" })
+  category!: CategoryTypeormEntity;
 }
