@@ -73,6 +73,7 @@ import { AuthGuard } from "@infrastructure/guards";
 
 const entities = [
   TableTypeormEntity,
+  UserTypeormEntity,
   CompanySettingsTypeormEntity,
   UnitOfMeasureTypeormEntity,
   ProductTypeormEntity,
@@ -93,6 +94,11 @@ const entities = [
   PickingListTypeormEntity,
   PickingListItemTypeormEntity,
 ];
+import { UserMysqlRepository } from "@infrastructure/repositories";
+import { RegisterUseCase } from "@application/use-cases/auth/register/register.use-case";
+import AuthConfiguration from "./auth.configuration";
+import UserConfiguration from "./user.configuration";
+import { UserTypeormEntity } from "@infrastructure/entities/user.typeorm.entity";
 
 @Module({
   imports: [
@@ -128,6 +134,8 @@ const entities = [
     PalettierTypeController,
   ],
   providers: [
+    ...(AuthConfiguration.providers ?? []),
+    ...(UserConfiguration.providers ?? []),
     {
       provide: CompanySettingsRepository,
       useClass: CompanySettingsMysqlRepository,
@@ -152,6 +160,8 @@ const entities = [
     GetPalettierTypeByIdUseCase,
     UpdatePalettierTypeUseCase,
     { provide: APP_GUARD, useClass: AuthGuard } satisfies Provider,
+    ...(AuthConfiguration.controllers ?? []),
+    ...(UserConfiguration.controllers ?? []),
   ],
 })
 export class AppModule {

@@ -10,3 +10,4 @@ export * from "./palette.repository";
 export * from "./lot.repository";
 export * from "./palette-lot.repository";
 export * from "./picking-list.repository";
+export * from "./user.repository";

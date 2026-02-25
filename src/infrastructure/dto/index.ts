@@ -8,3 +8,5 @@ export * from "./category";
 export * from "./unit-of-measure";
 export * from "./intake";
 export * from "./dashboard";
+export * from "./user";
+export * from "./auth";

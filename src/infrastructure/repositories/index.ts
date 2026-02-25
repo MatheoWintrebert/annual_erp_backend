@@ -10,3 +10,4 @@ export * from "./palette.mysql.repository";
 export * from "./lot.mysql.repository";
 export * from "./palette-lot.mysql.repository";
 export * from "./picking-list.mysql.repository";
+export * from "./user.mysql.repository";

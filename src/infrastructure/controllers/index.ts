@@ -10,3 +10,5 @@ export * from "./intake.controller";
 export * from "./stock.controller";
 export * from "./picking.controller";
 export * from "./dashboard.controller";
+export * from "./auth.controller";
+export * from "./user.controller";

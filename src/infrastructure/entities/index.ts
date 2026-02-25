@@ -16,3 +16,4 @@ export * from "./rule-placement-constraint-config.typeorm.entity";
 export * from "./category.typeorm.entity";
 export * from "./picking-list.typeorm.entity";
 export * from "./picking-list-item.typeorm.entity";
+export * from "./user.typeorm.entity";

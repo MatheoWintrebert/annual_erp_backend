@@ -16,3 +16,4 @@ export * from "./rule-placement-constraint-config.entity";
 export * from "./category.entity";
 export * from "./picking-list.entity";
 export * from "./picking-list-item.entity";
+export * from "./user.entity";

@@ -1,12 +1,14 @@
-import { ErrorCode, HttpResponseStatus } from "@domain/types";
-import { BaseError } from "./base.error";
+import { BaseError, BaseErrorOptions } from "@domain/errors/base.error";
+import { HttpResponseStatus } from "@domain/types";
+
+export type NotFoundErrorOption = Pick<BaseErrorOptions, "code" | "details">;
 
 export class NotFoundError extends BaseError {
-  constructor(resource: string) {
-    super(`${resource} not found`, {
+  constructor(message: string, options?: NotFoundErrorOption) {
+    super(message, {
       httpStatus: HttpResponseStatus.NOT_FOUND,
-      code: ErrorCode.RESOURCE_NOT_FOUND,
-      details: { resource },
+      code: options?.code,
+      details: options?.details,
     });
   }
 }
