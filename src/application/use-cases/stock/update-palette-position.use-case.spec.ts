@@ -53,7 +53,7 @@ describe("UpdatePalettePositionUseCase", () => {
 
     useCase = new UpdatePalettePositionUseCase(
       paletteRepository,
-      palettierRepository,
+      palettierRepository
     );
   });
 
@@ -113,7 +113,7 @@ describe("UpdatePalettePositionUseCase", () => {
         positionX: 0,
         positionY: 0,
         positionZ: 0,
-      }),
+      })
     ).rejects.toThrow(PaletteNotFoundError);
   });
 
@@ -128,7 +128,7 @@ describe("UpdatePalettePositionUseCase", () => {
         positionX: 0,
         positionY: 0,
         positionZ: 0,
-      }),
+      })
     ).rejects.toThrow(PalettierNotFoundError);
   });
 
@@ -145,7 +145,7 @@ describe("UpdatePalettePositionUseCase", () => {
         positionX: 3,
         positionY: 0,
         positionZ: 0,
-      }),
+      })
     ).rejects.toThrow(PositionOutOfBoundsError);
   });
 
@@ -163,7 +163,9 @@ describe("UpdatePalettePositionUseCase", () => {
 
     paletteRepository.findById.mockResolvedValue(mockPalette);
     palettierRepository.findById.mockResolvedValue(mockPalettier);
-    paletteRepository.findByPalettierIdAndPosition.mockResolvedValue(otherPalette);
+    paletteRepository.findByPalettierIdAndPosition.mockResolvedValue(
+      otherPalette
+    );
 
     await expect(
       useCase.execute({
@@ -172,7 +174,7 @@ describe("UpdatePalettePositionUseCase", () => {
         positionX: 1,
         positionY: 1,
         positionZ: 1,
-      }),
+      })
     ).rejects.toThrow(PositionOccupiedError);
   });
 
@@ -180,7 +182,9 @@ describe("UpdatePalettePositionUseCase", () => {
     paletteRepository.findById.mockResolvedValue(mockPalette);
     palettierRepository.findById.mockResolvedValue(mockPalettier);
     // Same palette returned — it occupies its own position
-    paletteRepository.findByPalettierIdAndPosition.mockResolvedValue(mockPalette);
+    paletteRepository.findByPalettierIdAndPosition.mockResolvedValue(
+      mockPalette
+    );
     paletteRepository.updatePosition.mockResolvedValue();
 
     await useCase.execute({

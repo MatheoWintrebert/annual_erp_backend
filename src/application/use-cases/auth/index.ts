@@ -1,3 +1,3 @@
-export * from './login';
-export * from './register';
-export * from './verify-2fa';
+export * from "./login";
+export * from "./register";
+export * from "./verify-2fa";

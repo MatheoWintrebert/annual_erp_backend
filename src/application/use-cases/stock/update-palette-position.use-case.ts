@@ -18,12 +18,10 @@ export interface UpdatePalettePositionInput {
 }
 
 @Injectable()
-export class UpdatePalettePositionUseCase
-  implements CommandUseCase<UpdatePalettePositionInput>
-{
+export class UpdatePalettePositionUseCase implements CommandUseCase<UpdatePalettePositionInput> {
   constructor(
     private readonly paletteRepository: PaletteRepository,
-    private readonly palettierRepository: PalettierRepository,
+    private readonly palettierRepository: PalettierRepository
   ) {}
 
   async execute(input: UpdatePalettePositionInput): Promise<void> {
@@ -57,7 +55,7 @@ export class UpdatePalettePositionUseCase
         positionZ,
         palettier.width,
         palettier.depth,
-        palettier.height,
+        palettier.height
       );
     }
 
@@ -66,10 +64,15 @@ export class UpdatePalettePositionUseCase
       palettierId,
       positionX,
       positionY,
-      positionZ,
+      positionZ
     );
     if (occupant && occupant.id !== paletteId) {
-      throw new PositionOccupiedError(palettierId, positionX, positionY, positionZ);
+      throw new PositionOccupiedError(
+        palettierId,
+        positionX,
+        positionY,
+        positionZ
+      );
     }
 
     // 5. Update position
@@ -78,7 +81,7 @@ export class UpdatePalettePositionUseCase
       palettierId,
       positionX,
       positionY,
-      positionZ,
+      positionZ
     );
   }
 }

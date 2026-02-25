@@ -66,7 +66,9 @@ describe("DashboardController", () => {
 
     expect(result.expiryAlerts).toHaveLength(1);
     expect(result.expiryAlerts[0].productName).toBe("Whole Milk");
-    expect(result.expiryAlerts[0].nearestExpiryDate).toBe("2026-02-20T00:00:00.000Z");
+    expect(result.expiryAlerts[0].nearestExpiryDate).toBe(
+      "2026-02-20T00:00:00.000Z"
+    );
     expect(result.expiryAlerts[0].severity).toBe("critical");
     expect(result.lowStockAlerts).toHaveLength(1);
     expect(result.lowStockAlerts[0].productName).toBe("Mounting Brackets");

@@ -165,7 +165,10 @@ export class PalettierMysqlRepository implements PalettierRepository {
     const result = await this.repository
       .createQueryBuilder("palettier")
       .select("COUNT(*)", "count")
-      .addSelect("COALESCE(SUM(palettier.width * palettier.depth * palettier.height), 0)", "totalCapacity")
+      .addSelect(
+        "COALESCE(SUM(palettier.width * palettier.depth * palettier.height), 0)",
+        "totalCapacity"
+      )
       .where("palettier.deletedAt IS NULL")
       .getRawOne<{ count: string; totalCapacity: string }>();
 

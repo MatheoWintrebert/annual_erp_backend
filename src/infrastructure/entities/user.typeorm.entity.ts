@@ -1,4 +1,4 @@
-import { IUser } from '@domain/types';
+import { IUser } from "@domain/types";
 import {
   BaseEntity,
   Column,
@@ -6,40 +6,40 @@ import {
   Entity,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
-} from 'typeorm';
+} from "typeorm";
 
-@Entity('user')
+@Entity("user")
 export class UserTypeormEntity extends BaseEntity implements IUser {
   @PrimaryGeneratedColumn()
   id!: number;
 
-  @Column({ name: 'last_name' })
+  @Column({ name: "last_name" })
   lastName!: string;
 
-  @Column({ name: 'first_name' })
+  @Column({ name: "first_name" })
   firstName!: string;
 
-  @Column({ name: 'email', unique: true })
+  @Column({ name: "email", unique: true })
   email!: string;
 
-  @Column({ name: 'password' })
+  @Column({ name: "password" })
   password!: string;
 
-  @Column({ name: 'is_active', default: true })
+  @Column({ name: "is_active", default: true })
   isActive!: boolean;
 
-  @Column({ name: 'two_factor_secret', nullable: true })
+  @Column({ name: "two_factor_secret", nullable: true })
   twoFactorSecret?: string | null;
 
-  @Column({ name: 'is_two_factor_enabled', default: false })
+  @Column({ name: "is_two_factor_enabled", default: false })
   isTwoFactorEnabled!: boolean;
 
-  @Column({ name: 'backup_codes', type: 'json', nullable: true })
+  @Column({ name: "backup_codes", type: "json", nullable: true })
   backupCodes?: string[] | null;
 
-  @CreateDateColumn({ name: 'created_at' })
+  @CreateDateColumn({ name: "created_at" })
   createdAt!: Date;
 
-  @UpdateDateColumn({ name: 'updated_at' })
+  @UpdateDateColumn({ name: "updated_at" })
   updatedAt!: Date;
 }

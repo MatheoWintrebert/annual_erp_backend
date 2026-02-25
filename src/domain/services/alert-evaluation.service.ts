@@ -58,7 +58,10 @@ export class AlertEvaluationService {
         totalQuantity += stock.quantity;
 
         if (stock.expiryDate !== null) {
-          if (nearestExpiryDate === null || stock.expiryDate < nearestExpiryDate) {
+          if (
+            nearestExpiryDate === null ||
+            stock.expiryDate < nearestExpiryDate
+          ) {
             nearestExpiryDate = stock.expiryDate;
           }
         }
@@ -68,13 +71,19 @@ export class AlertEvaluationService {
         continue;
       }
 
-      const daysRemaining = this.calculateDaysRemaining(nearestExpiryDate, currentDate);
+      const daysRemaining = this.calculateDaysRemaining(
+        nearestExpiryDate,
+        currentDate
+      );
 
       if (daysRemaining > product.expiryAlertThreshold) {
         continue;
       }
 
-      const severity = this.calculateSeverity(daysRemaining, product.expiryAlertThreshold);
+      const severity = this.calculateSeverity(
+        daysRemaining,
+        product.expiryAlertThreshold
+      );
 
       alerts.push({
         productId: product.id,
@@ -131,8 +140,16 @@ export class AlertEvaluationService {
   }
 
   private calculateDaysRemaining(expiryDate: Date, currentDate: Date): number {
-    const expiryStart = new Date(expiryDate.getFullYear(), expiryDate.getMonth(), expiryDate.getDate());
-    const currentStart = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate());
+    const expiryStart = new Date(
+      expiryDate.getFullYear(),
+      expiryDate.getMonth(),
+      expiryDate.getDate()
+    );
+    const currentStart = new Date(
+      currentDate.getFullYear(),
+      currentDate.getMonth(),
+      currentDate.getDate()
+    );
     const diffMs = expiryStart.getTime() - currentStart.getTime();
     return Math.floor(diffMs / (1000 * 60 * 60 * 24));
   }

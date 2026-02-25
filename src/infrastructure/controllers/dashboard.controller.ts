@@ -33,8 +33,7 @@ export class DashboardController {
   @Get("summary")
   @HttpCode(HttpStatus.OK)
   @ApiOperation({
-    summary:
-      "Get dashboard stock summary, intake activity, and setup progress",
+    summary: "Get dashboard stock summary, intake activity, and setup progress",
   })
   @ApiResponse({
     status: HttpStatus.OK,

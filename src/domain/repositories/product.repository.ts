@@ -67,12 +67,14 @@ export abstract class ProductRepository {
 
   abstract countActiveProducts(): Promise<number>;
 
-  abstract findAllWithThresholds(): Promise<{
-    id: number;
-    name: string;
-    reference: string;
-    minimumStock: number | null;
-    expiryAlertThreshold: number | null;
-    unitOfMeasureName: string;
-  }[]>;
+  abstract findAllWithThresholds(): Promise<
+    {
+      id: number;
+      name: string;
+      reference: string;
+      minimumStock: number | null;
+      expiryAlertThreshold: number | null;
+      unitOfMeasureName: string;
+    }[]
+  >;
 }

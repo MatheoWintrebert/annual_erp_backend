@@ -1,4 +1,8 @@
-import { ErrorCode, HttpResponseStatus, PickingListStatus } from "@domain/types";
+import {
+  ErrorCode,
+  HttpResponseStatus,
+  PickingListStatus,
+} from "@domain/types";
 import { BaseError } from "./base.error";
 
 export interface InsufficientStockDetail {
@@ -47,14 +51,18 @@ export class PickingListNotFoundError extends BaseError {
 }
 
 export class InvalidPickingListStatusError extends BaseError {
-  constructor(id: number, currentStatus: PickingListStatus, expectedStatus: PickingListStatus) {
+  constructor(
+    id: number,
+    currentStatus: PickingListStatus,
+    expectedStatus: PickingListStatus
+  ) {
     super(
       `Picking list ${String(id)} has status '${currentStatus}', expected '${expectedStatus}'`,
       {
         httpStatus: HttpResponseStatus.BAD_REQUEST,
         code: ErrorCode.INVALID_PICKING_LIST_STATUS,
         details: { currentStatus, expectedStatus },
-      },
+      }
     );
   }
 }
@@ -85,7 +93,7 @@ export class StockDeductionFailedError extends BaseError {
         httpStatus: HttpResponseStatus.CONFLICT,
         code: ErrorCode.STOCK_DEDUCTION_FAILED,
         details: { paletteLotId, requestedQuantity },
-      },
+      }
     );
   }
 }

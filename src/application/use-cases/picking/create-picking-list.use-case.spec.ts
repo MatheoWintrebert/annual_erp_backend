@@ -16,7 +16,7 @@ describe("CreatePickingListUseCase", () => {
   const now = new Date();
 
   const createMockPickingList = (
-    items: { productId: number; requestedQuantity: number }[],
+    items: { productId: number; requestedQuantity: number }[]
   ): PickingListEntity =>
     new PickingListEntity({
       id: 1,
@@ -32,12 +32,12 @@ describe("CreatePickingListUseCase", () => {
             requestedQuantity: item.requestedQuantity,
             createdAt: now,
             updatedAt: now,
-          }),
+          })
       ),
     });
 
   const createMockStock = (
-    entries: { productId: number; available: number }[],
+    entries: { productId: number; available: number }[]
   ): ProductStock[] =>
     entries.map((e) => ({
       productId: e.productId,
@@ -61,7 +61,7 @@ describe("CreatePickingListUseCase", () => {
 
     useCase = new CreatePickingListUseCase(
       pickingListRepository,
-      paletteRepository,
+      paletteRepository
     );
   });
 
@@ -77,7 +77,7 @@ describe("CreatePickingListUseCase", () => {
       createMockStock([
         { productId: 1, available: 100 },
         { productId: 2, available: 50 },
-      ]),
+      ])
     );
 
     const mockResult = createMockPickingList(input.items);
@@ -91,7 +91,7 @@ describe("CreatePickingListUseCase", () => {
 
   it("should throw EmptyPickingListError for empty items", async () => {
     await expect(useCase.execute({ items: [] })).rejects.toThrow(
-      EmptyPickingListError,
+      EmptyPickingListError
     );
 
     expect(pickingListRepository.create).not.toHaveBeenCalled();
@@ -106,7 +106,7 @@ describe("CreatePickingListUseCase", () => {
     };
 
     await expect(useCase.execute(input)).rejects.toThrow(
-      DuplicateProductInListError,
+      DuplicateProductInListError
     );
 
     expect(pickingListRepository.create).not.toHaveBeenCalled();
@@ -118,7 +118,7 @@ describe("CreatePickingListUseCase", () => {
     };
 
     paletteRepository.getAvailableStockByProductIds.mockResolvedValue(
-      createMockStock([{ productId: 1, available: 100 }]),
+      createMockStock([{ productId: 1, available: 100 }])
     );
 
     try {
@@ -151,7 +151,7 @@ describe("CreatePickingListUseCase", () => {
       createMockStock([
         { productId: 1, available: 50 },
         { productId: 2, available: 10 },
-      ]),
+      ])
     );
 
     try {

@@ -8,9 +8,10 @@ import {
 } from "@domain/repositories";
 
 @Injectable()
-export class GetDashboardSummaryUseCase
-  implements QueryUseCase<void, DashboardSummary>
-{
+export class GetDashboardSummaryUseCase implements QueryUseCase<
+  void,
+  DashboardSummary
+> {
   constructor(
     private readonly paletteRepository: PaletteRepository,
     private readonly productRepository: ProductRepository,
@@ -67,7 +68,12 @@ export class GetDashboardSummaryUseCase
     const hasProducts = totalProducts > 0;
     const hasRules = ruleCount > 0;
     const hasStock = totalPalettes > 0;
-    const completedSteps = [hasPalettiers, hasProducts, hasRules, hasStock].filter(Boolean).length;
+    const completedSteps = [
+      hasPalettiers,
+      hasProducts,
+      hasRules,
+      hasStock,
+    ].filter(Boolean).length;
 
     return {
       stock: {

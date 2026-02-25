@@ -723,7 +723,9 @@ describe("PlacementEngineService", () => {
           g.productIds.includes(2)
         );
         expect(unplaceableGroup?.recommendation).toBeNull();
-        expect(unplaceableGroup?.reasoning).toContain("No palettier satisfies the rules for Product B");
+        expect(unplaceableGroup?.reasoning).toContain(
+          "No palettier satisfies the rules for Product B"
+        );
       }
     });
 

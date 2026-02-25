@@ -7,9 +7,10 @@ import { RuleViolationDetectorService } from "@domain/services";
 const MAX_RULES_FOR_VIOLATION_SCAN = 1000;
 
 @Injectable()
-export class GetPaletteViolationsUseCase
-  implements QueryUseCase<void, RuleViolation[]>
-{
+export class GetPaletteViolationsUseCase implements QueryUseCase<
+  void,
+  RuleViolation[]
+> {
   constructor(
     private readonly ruleRepository: RuleRepository,
     private readonly violationDetector: RuleViolationDetectorService

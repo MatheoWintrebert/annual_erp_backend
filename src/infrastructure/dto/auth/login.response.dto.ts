@@ -4,10 +4,10 @@ import { ApiProperty } from "@nestjs/swagger";
 import { IsString, ValidateNested } from "class-validator";
 
 export class LoginResponseDto {
-    @ApiProperty({
-        description: 'Authentication token',
-        type: String,
-    })
-    @IsString()
+  @ApiProperty({
+    description: "Authentication token",
+    type: String,
+  })
+  @IsString()
   token: string;
 }

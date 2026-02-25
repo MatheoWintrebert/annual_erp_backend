@@ -12,9 +12,10 @@ function escapeLikeInput(input: string): string {
 }
 
 @Injectable()
-export class GetPalettesUseCase
-  implements QueryUseCase<GetPalettesInput, PaletteWithDetails[]>
-{
+export class GetPalettesUseCase implements QueryUseCase<
+  GetPalettesInput,
+  PaletteWithDetails[]
+> {
   constructor(private readonly paletteRepository: PaletteRepository) {}
 
   async execute(input: GetPalettesInput): Promise<PaletteWithDetails[]> {

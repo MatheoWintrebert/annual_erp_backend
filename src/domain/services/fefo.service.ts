@@ -20,7 +20,9 @@ export class FefoService {
 
     const productIds = items.map((item) => item.productId);
     const paletteLots =
-      await this.paletteRepository.getPaletteLotsByProductIdsForFefo(productIds);
+      await this.paletteRepository.getPaletteLotsByProductIdsForFefo(
+        productIds
+      );
 
     // Group palette lots by product ID
     const lotsByProduct = new Map<number, PaletteLotFefoData[]>();

@@ -94,8 +94,16 @@ describe("AlertEvaluationService", () => {
     it("should aggregate quantity across multiple lots for same product", () => {
       const products = [makeProduct()];
       const stock = [
-        makeStock({ lotId: 1, quantity: 50, expiryDate: new Date("2026-03-01") }),
-        makeStock({ lotId: 2, quantity: 75, expiryDate: new Date("2026-03-05") }),
+        makeStock({
+          lotId: 1,
+          quantity: 50,
+          expiryDate: new Date("2026-03-01"),
+        }),
+        makeStock({
+          lotId: 2,
+          quantity: 75,
+          expiryDate: new Date("2026-03-05"),
+        }),
       ];
 
       const alerts = service.evaluateExpiryAlerts(products, stock, currentDate);
@@ -145,7 +153,9 @@ describe("AlertEvaluationService", () => {
 
     it("should handle zero stock (quantity 0 with threshold set)", () => {
       const products = [makeProduct()];
-      const stock = [makeStock({ quantity: 0, expiryDate: new Date("2026-02-20") })];
+      const stock = [
+        makeStock({ quantity: 0, expiryDate: new Date("2026-02-20") }),
+      ];
 
       const alerts = service.evaluateExpiryAlerts(products, stock, currentDate);
 

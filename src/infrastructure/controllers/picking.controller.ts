@@ -36,7 +36,7 @@ export class PickingController {
     private readonly createPickingListUseCase: CreatePickingListUseCase,
     private readonly generatePickRouteUseCase: GeneratePickRouteUseCase,
     private readonly completePickingListUseCase: CompletePickingListUseCase,
-    private readonly cancelPickingListUseCase: CancelPickingListUseCase,
+    private readonly cancelPickingListUseCase: CancelPickingListUseCase
   ) {}
 
   @Get("available-stock")
@@ -44,7 +44,7 @@ export class PickingController {
   @ApiOperation({ summary: "Get available stock for products" })
   @ApiResponse({ status: HttpStatus.OK, type: [AvailableStockResponseDto] })
   async getAvailableStock(
-    @Query() query: AvailableStockQueryDto,
+    @Query() query: AvailableStockQueryDto
   ): Promise<AvailableStockResponseDto[]> {
     const stock = await this.getAvailableStockUseCase.execute(query.productIds);
     return stock.map((s) => AvailableStockResponseDto.fromDomain(s));
@@ -55,7 +55,7 @@ export class PickingController {
   @ApiOperation({ summary: "Create a new picking list" })
   @ApiResponse({ status: HttpStatus.CREATED, type: PickingListResponseDto })
   async create(
-    @Body() dto: CreatePickingListRequestDto,
+    @Body() dto: CreatePickingListRequestDto
   ): Promise<PickingListResponseDto> {
     const list = await this.createPickingListUseCase.execute({
       items: dto.items,
@@ -65,10 +65,12 @@ export class PickingController {
 
   @Post(":id/generate-route")
   @HttpCode(HttpStatus.OK)
-  @ApiOperation({ summary: "Generate FEFO-ordered pick route for a picking list" })
+  @ApiOperation({
+    summary: "Generate FEFO-ordered pick route for a picking list",
+  })
   @ApiResponse({ status: HttpStatus.OK, type: [PickRouteItemResponseDto] })
   async generateRoute(
-    @Param("id", ParseIntPipe) id: number,
+    @Param("id", ParseIntPipe) id: number
   ): Promise<PickRouteItemResponseDto[]> {
     const route = await this.generatePickRouteUseCase.execute(id);
     return route.map((item) => PickRouteItemResponseDto.fromDomain(item));
@@ -80,7 +82,7 @@ export class PickingController {
   @ApiResponse({ status: HttpStatus.OK, type: CompletePickingListResponseDto })
   async complete(
     @Param("id", ParseIntPipe) id: number,
-    @Body() dto: CompletePickingListRequestDto,
+    @Body() dto: CompletePickingListRequestDto
   ): Promise<CompletePickingListResponseDto> {
     const result = await this.completePickingListUseCase.execute({
       pickingListId: id,
@@ -94,7 +96,7 @@ export class PickingController {
   @ApiOperation({ summary: "Cancel a picking list — no stock deducted" })
   @ApiResponse({ status: HttpStatus.OK, type: CancelPickingListResponseDto })
   async cancel(
-    @Param("id", ParseIntPipe) id: number,
+    @Param("id", ParseIntPipe) id: number
   ): Promise<CancelPickingListResponseDto> {
     const result = await this.cancelPickingListUseCase.execute(id);
     return CancelPickingListResponseDto.fromDomain(result);

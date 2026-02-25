@@ -5,9 +5,14 @@ import { AlertEvaluationService } from "@domain/services";
 
 describe("GetDashboardAlertsUseCase", () => {
   let useCase: GetDashboardAlertsUseCase;
-  let productRepository: jest.Mocked<Pick<ProductRepository, "findAllWithThresholds">>;
+  let productRepository: jest.Mocked<
+    Pick<ProductRepository, "findAllWithThresholds">
+  >;
   let paletteRepository: jest.Mocked<
-    Pick<PaletteRepository, "getStockWithExpiryByProductIds" | "getStockQuantityByProductIds">
+    Pick<
+      PaletteRepository,
+      "getStockWithExpiryByProductIds" | "getStockQuantityByProductIds"
+    >
   >;
   let alertEvaluationService: AlertEvaluationService;
 
@@ -43,7 +48,12 @@ describe("GetDashboardAlertsUseCase", () => {
     ]);
 
     paletteRepository.getStockWithExpiryByProductIds.mockResolvedValue([
-      { productId: 1, lotId: 1, quantity: 100, expiryDate: new Date("2026-02-20") },
+      {
+        productId: 1,
+        lotId: 1,
+        quantity: 100,
+        expiryDate: new Date("2026-02-20"),
+      },
     ]);
 
     const result = await useCase.execute();
@@ -83,8 +93,12 @@ describe("GetDashboardAlertsUseCase", () => {
 
     expect(result.expiryAlerts).toHaveLength(0);
     expect(result.lowStockAlerts).toHaveLength(0);
-    expect(paletteRepository.getStockWithExpiryByProductIds).not.toHaveBeenCalled();
-    expect(paletteRepository.getStockQuantityByProductIds).not.toHaveBeenCalled();
+    expect(
+      paletteRepository.getStockWithExpiryByProductIds
+    ).not.toHaveBeenCalled();
+    expect(
+      paletteRepository.getStockQuantityByProductIds
+    ).not.toHaveBeenCalled();
   });
 
   it("should return empty arrays when all stock is healthy", async () => {
@@ -100,7 +114,12 @@ describe("GetDashboardAlertsUseCase", () => {
     ]);
 
     paletteRepository.getStockWithExpiryByProductIds.mockResolvedValue([
-      { productId: 1, lotId: 1, quantity: 100, expiryDate: new Date("2027-01-01") },
+      {
+        productId: 1,
+        lotId: 1,
+        quantity: 100,
+        expiryDate: new Date("2027-01-01"),
+      },
     ]);
 
     paletteRepository.getStockQuantityByProductIds.mockResolvedValue([
@@ -134,7 +153,12 @@ describe("GetDashboardAlertsUseCase", () => {
     ]);
 
     paletteRepository.getStockWithExpiryByProductIds.mockResolvedValue([
-      { productId: 1, lotId: 1, quantity: 50, expiryDate: new Date("2026-02-25") },
+      {
+        productId: 1,
+        lotId: 1,
+        quantity: 50,
+        expiryDate: new Date("2026-02-25"),
+      },
     ]);
 
     paletteRepository.getStockQuantityByProductIds.mockResolvedValue([
@@ -180,7 +204,11 @@ describe("GetDashboardAlertsUseCase", () => {
 
     await useCase.execute();
 
-    expect(paletteRepository.getStockWithExpiryByProductIds).toHaveBeenCalledWith([1, 3]);
-    expect(paletteRepository.getStockQuantityByProductIds).toHaveBeenCalledWith([2, 3]);
+    expect(
+      paletteRepository.getStockWithExpiryByProductIds
+    ).toHaveBeenCalledWith([1, 3]);
+    expect(paletteRepository.getStockQuantityByProductIds).toHaveBeenCalledWith(
+      [2, 3]
+    );
   });
 });

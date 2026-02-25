@@ -113,10 +113,9 @@ describe("RecommendPlacementUseCase", () => {
     expect(mockProductRepo.findByIds).toHaveBeenCalledWith([1]);
     expect(
       mockPlacementEngine.recommendWithConflictDetection
-    ).toHaveBeenCalledWith(
-      { productIds: [1], productCategoryIds: [10] },
-      ["Widget A"]
-    );
+    ).toHaveBeenCalledWith({ productIds: [1], productCategoryIds: [10] }, [
+      "Widget A",
+    ]);
   });
 
   it("should return a resolved placement result for multiple products", async () => {
@@ -166,10 +165,9 @@ describe("RecommendPlacementUseCase", () => {
 
     expect(
       mockPlacementEngine.recommendWithConflictDetection
-    ).toHaveBeenCalledWith(
-      { productIds: [1], productCategoryIds: [null] },
-      ["Widget A"]
-    );
+    ).toHaveBeenCalledWith({ productIds: [1], productCategoryIds: [null] }, [
+      "Widget A",
+    ]);
   });
 
   it("should return a conflict result when products have incompatible rules", async () => {

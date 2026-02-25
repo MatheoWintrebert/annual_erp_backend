@@ -14,8 +14,15 @@ import {
   PaletteItemDetail,
   ProductStock,
 } from "@domain/types";
-import { PaletteNotFoundError, PositionOccupiedError, StockDeductionFailedError } from "@domain/errors";
-import { PaletteTypeormEntity, PaletteLotTypeormEntity } from "@infrastructure/entities";
+import {
+  PaletteNotFoundError,
+  PositionOccupiedError,
+  StockDeductionFailedError,
+} from "@domain/errors";
+import {
+  PaletteTypeormEntity,
+  PaletteLotTypeormEntity,
+} from "@infrastructure/entities";
 
 interface PaletteDetailRow {
   paletteId: number;
@@ -381,7 +388,11 @@ export class PaletteMysqlRepository implements PaletteRepository {
         .addSelect("product.reference", "productReference")
         .addSelect("unitOfMeasure.name", "unitOfMeasureName")
         .from("products", "product")
-        .leftJoin("units_of_measure", "unitOfMeasure", "unitOfMeasure.id = product.unit_of_measure_id")
+        .leftJoin(
+          "units_of_measure",
+          "unitOfMeasure",
+          "unitOfMeasure.id = product.unit_of_measure_id"
+        )
         .where("product.id IN (:...missingIds)", { missingIds })
         .andWhere("product.deleted_at IS NULL")
         .getRawMany();
@@ -490,7 +501,10 @@ export class PaletteMysqlRepository implements PaletteRepository {
       .createQueryBuilder()
       .update(PaletteLotTypeormEntity)
       .set({ quantity: () => `quantity - ${String(quantity)}` })
-      .where("id = :id AND quantity >= :quantity", { id: paletteLotId, quantity })
+      .where("id = :id AND quantity >= :quantity", {
+        id: paletteLotId,
+        quantity,
+      })
       .execute();
 
     if (result.affected === 0) {
@@ -500,7 +514,14 @@ export class PaletteMysqlRepository implements PaletteRepository {
 
   async getStockWithExpiryByProductIds(
     productIds: number[]
-  ): Promise<{ productId: number; lotId: number; quantity: number; expiryDate: Date | null }[]> {
+  ): Promise<
+    {
+      productId: number;
+      lotId: number;
+      quantity: number;
+      expiryDate: Date | null;
+    }[]
+  > {
     if (productIds.length === 0) {
       return [];
     }

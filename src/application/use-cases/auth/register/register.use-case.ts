@@ -1,24 +1,24 @@
-import { Inject } from '@nestjs/common';
-import { JwtService } from '@nestjs/jwt';
+import { Inject } from "@nestjs/common";
+import { JwtService } from "@nestjs/jwt";
 import { UserRepository } from "@domain/repositories";
 import { UserEntity } from "@domain/entities";
-import { IRegisterInput } from './register.input';
-import { IRegisterOutput } from './register.output';
-import { HOTP, Secret } from '@otp-lib/core';
-import { hash } from 'crypto';
-import { hashPassword } from '@libs/helpers';
-import { TOTP } from '@otp-lib/authenticator';
+import { IRegisterInput } from "./register.input";
+import { IRegisterOutput } from "./register.output";
+import { HOTP, Secret } from "@otp-lib/core";
+import { hash } from "crypto";
+import { hashPassword } from "@libs/helpers";
+import { TOTP } from "@otp-lib/authenticator";
 
 export class RegisterUseCase {
   constructor(
     private readonly userRepository: UserRepository,
-    private readonly jwtService: JwtService,
+    private readonly jwtService: JwtService
   ) {}
 
   async execute(input: IRegisterInput): Promise<IRegisterOutput> {
     const existingUser = await this.userRepository.findByEmail(input.email);
     if (!existingUser) {
-      throw new Error('User not found');
+      throw new Error("User not found");
     }
     const secret = Secret.fromUtf8(existingUser.twoFactorSecret!);
 
@@ -27,7 +27,7 @@ export class RegisterUseCase {
     const verify = await codeOTP.verifyDelta(input.code);
 
     if (verify === null) {
-      throw new Error('Invalid code');
+      throw new Error("Invalid code");
     }
 
     const newSecret = Secret.create();
@@ -40,13 +40,13 @@ export class RegisterUseCase {
     const updatedUser = await this.userRepository.update(existingUser.id, user);
 
     const payload = { email: updatedUser.email, sub: updatedUser.id };
-    const token = this.jwtService.sign(payload, {secret: 'to2FA'} );
+    const token = this.jwtService.sign(payload, { secret: "to2FA" });
 
     const totp = new TOTP({
-        account: existingUser.email,
-        issuer: "Pallitix",
-        secret: newSecret,
-    });    
+      account: existingUser.email,
+      issuer: "Pallitix",
+      secret: newSecret,
+    });
 
     return { user: updatedUser, token, qrCode: totp.toURI() };
   }

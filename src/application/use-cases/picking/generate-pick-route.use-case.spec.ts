@@ -19,7 +19,7 @@ describe("GeneratePickRouteUseCase", () => {
     status: PickingListStatus,
     items: { productId: number; requestedQuantity: number }[] = [
       { productId: 1, requestedQuantity: 10 },
-    ],
+    ]
   ): PickingListEntity =>
     new PickingListEntity({
       id: 1,
@@ -36,12 +36,12 @@ describe("GeneratePickRouteUseCase", () => {
             requestedQuantity: item.requestedQuantity,
             createdAt: now,
             updatedAt: now,
-          }),
+          })
       ),
     });
 
   const createMockRouteItem = (
-    overrides: Partial<PickRouteItem> = {},
+    overrides: Partial<PickRouteItem> = {}
   ): PickRouteItem => ({
     pickingListItemId: 1,
     productId: 1,
@@ -88,7 +88,7 @@ describe("GeneratePickRouteUseCase", () => {
     expect(pickingListRepository.findById).toHaveBeenCalledWith(1);
     expect(fefoService.generatePickRoute).toHaveBeenCalledWith(
       new Map([[1, 1]]),
-      [{ productId: 1, requestedQuantity: 10 }],
+      [{ productId: 1, requestedQuantity: 10 }]
     );
   });
 
@@ -96,7 +96,7 @@ describe("GeneratePickRouteUseCase", () => {
     pickingListRepository.findById.mockResolvedValue(null);
 
     await expect(useCase.execute(999)).rejects.toThrow(
-      PickingListNotFoundError,
+      PickingListNotFoundError
     );
     expect(fefoService.generatePickRoute).not.toHaveBeenCalled();
   });
@@ -106,7 +106,7 @@ describe("GeneratePickRouteUseCase", () => {
     pickingListRepository.findById.mockResolvedValue(pickingList);
 
     await expect(useCase.execute(1)).rejects.toThrow(
-      InvalidPickingListStatusError,
+      InvalidPickingListStatusError
     );
     expect(fefoService.generatePickRoute).not.toHaveBeenCalled();
   });
@@ -121,7 +121,7 @@ describe("GeneratePickRouteUseCase", () => {
 
     expect(pickingListRepository.updateStatus).toHaveBeenCalledWith(
       1,
-      PickingListStatus.IN_PROGRESS,
+      PickingListStatus.IN_PROGRESS
     );
   });
 

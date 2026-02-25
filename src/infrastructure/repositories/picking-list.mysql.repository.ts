@@ -3,7 +3,11 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { PickingListEntity, PickingListItemEntity } from "@domain/entities";
 import { PickingListRepository } from "@domain/repositories";
-import { CreatePickingListInput, PickingListItemStatus, PickingListStatus } from "@domain/types";
+import {
+  CreatePickingListInput,
+  PickingListItemStatus,
+  PickingListStatus,
+} from "@domain/types";
 import {
   PickingListTypeormEntity,
   PickingListItemTypeormEntity,
@@ -36,7 +40,9 @@ export class PickingListMysqlRepository implements PickingListRepository {
     });
 
     if (!loaded) {
-      throw new Error(`Failed to load newly created picking list ${String(saved.id)}`);
+      throw new Error(
+        `Failed to load newly created picking list ${String(saved.id)}`
+      );
     }
 
     return this.toDomain(loaded);
@@ -61,13 +67,19 @@ export class PickingListMysqlRepository implements PickingListRepository {
 
   async updateItems(
     pickingListId: number,
-    items: { id: number; status: PickingListItemStatus; pickedQuantity: number | null }[]
+    items: {
+      id: number;
+      status: PickingListItemStatus;
+      pickedQuantity: number | null;
+    }[]
   ): Promise<void> {
-    const itemRepo = this.pickingListRepo.manager.getRepository(PickingListItemTypeormEntity);
+    const itemRepo = this.pickingListRepo.manager.getRepository(
+      PickingListItemTypeormEntity
+    );
     for (const item of items) {
       await itemRepo.update(
         { id: item.id, pickingListId },
-        { status: item.status, pickedQuantity: item.pickedQuantity },
+        { status: item.status, pickedQuantity: item.pickedQuantity }
       );
     }
   }

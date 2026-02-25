@@ -49,9 +49,7 @@ export class PaletteListItemResponseDto {
   @ApiProperty({ type: [PaletteItemDetailResponseDto] })
   items!: PaletteItemDetailResponseDto[];
 
-  static fromDomain(
-    palette: PaletteWithDetails
-  ): PaletteListItemResponseDto {
+  static fromDomain(palette: PaletteWithDetails): PaletteListItemResponseDto {
     const dto = new PaletteListItemResponseDto();
     dto.id = palette.id;
     dto.palettierId = palette.palettierId;

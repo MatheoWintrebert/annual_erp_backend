@@ -94,14 +94,20 @@ export class CompletePickingListResponseDto {
   @ApiProperty({ type: [PickingDiscrepancyDto] })
   discrepancies!: PickingDiscrepancyDto[];
 
-  static fromDomain(result: PickingCompletionResult): CompletePickingListResponseDto {
+  static fromDomain(
+    result: PickingCompletionResult
+  ): CompletePickingListResponseDto {
     const dto = new CompletePickingListResponseDto();
     dto.pickingListId = result.pickingListId;
     dto.status = result.status;
     dto.totalItemsPicked = result.totalItemsPicked;
     dto.totalItemsSkipped = result.totalItemsSkipped;
-    dto.deductions = result.deductions.map((d) => StockDeductionDto.fromDomain(d));
-    dto.discrepancies = result.discrepancies.map((d) => PickingDiscrepancyDto.fromDomain(d));
+    dto.deductions = result.deductions.map((d) =>
+      StockDeductionDto.fromDomain(d)
+    );
+    dto.discrepancies = result.discrepancies.map((d) =>
+      PickingDiscrepancyDto.fromDomain(d)
+    );
     return dto;
   }
 }

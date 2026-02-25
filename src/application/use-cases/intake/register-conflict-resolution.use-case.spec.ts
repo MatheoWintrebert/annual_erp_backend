@@ -193,9 +193,7 @@ describe("RegisterConflictResolutionUseCase", () => {
       ]),
     };
     mockPalettierRepo = {
-      findByIds: jest
-        .fn()
-        .mockResolvedValue([mockPalettier1, mockPalettier2]),
+      findByIds: jest.fn().mockResolvedValue([mockPalettier1, mockPalettier2]),
     };
     mockPaletteRepo = {
       findOccupiedPositionsByPalettierIds: jest
@@ -225,10 +223,11 @@ describe("RegisterConflictResolutionUseCase", () => {
 
     // Transaction mock: executes the callback immediately (no real DB)
     mockDataSource = {
-      transaction: jest.fn().mockImplementation(
-        async <T>(fn: (manager: unknown) => Promise<T>): Promise<T> =>
-          fn({})
-      ),
+      transaction: jest
+        .fn()
+        .mockImplementation(
+          async <T>(fn: (manager: unknown) => Promise<T>): Promise<T> => fn({})
+        ),
     };
 
     const module: TestingModule = await Test.createTestingModule({
@@ -276,9 +275,7 @@ describe("RegisterConflictResolutionUseCase", () => {
 
   it("should throw PositionOccupiedError when position occupied for one group", async () => {
     mockPaletteRepo.findOccupiedPositionsByPalettierIds.mockResolvedValue(
-      new Map([
-        [2, [{ positionX: 1, positionY: 0, positionZ: 0 }]],
-      ])
+      new Map([[2, [{ positionX: 1, positionY: 0, positionZ: 0 }]]])
     );
 
     await expect(useCase.execute(defaultInput)).rejects.toThrow(
@@ -303,7 +300,13 @@ describe("RegisterConflictResolutionUseCase", () => {
     const samePositionInput: RegisterConflictResolutionInput = {
       groups: [
         defaultInput.groups[0],
-        { ...defaultInput.groups[1], palettierId: 1, positionX: 0, positionY: 0, positionZ: 0 },
+        {
+          ...defaultInput.groups[1],
+          palettierId: 1,
+          positionX: 0,
+          positionY: 0,
+          positionZ: 0,
+        },
       ],
     };
 
@@ -392,7 +395,12 @@ describe("RegisterConflictResolutionUseCase", () => {
           positionY: 0,
           positionZ: 0,
           items: [
-            { productId: 1, lotReference: null, expiryDate: null, quantity: 10 },
+            {
+              productId: 1,
+              lotReference: null,
+              expiryDate: null,
+              quantity: 10,
+            },
             { productId: 3, lotReference: null, expiryDate: null, quantity: 5 },
           ],
         },
@@ -402,7 +410,12 @@ describe("RegisterConflictResolutionUseCase", () => {
           positionY: 0,
           positionZ: 0,
           items: [
-            { productId: 2, lotReference: null, expiryDate: null, quantity: 20 },
+            {
+              productId: 2,
+              lotReference: null,
+              expiryDate: null,
+              quantity: 20,
+            },
           ],
         },
       ],

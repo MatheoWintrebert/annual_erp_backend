@@ -9,9 +9,10 @@ export interface RecommendPlacementInput {
 }
 
 @Injectable()
-export class RecommendPlacementUseCase
-  implements QueryUseCase<RecommendPlacementInput, PlacementResult>
-{
+export class RecommendPlacementUseCase implements QueryUseCase<
+  RecommendPlacementInput,
+  PlacementResult
+> {
   constructor(
     private readonly productRepository: ProductRepository,
     private readonly placementEngine: PlacementEngineService
@@ -32,9 +33,7 @@ export class RecommendPlacementUseCase
     return this.placementEngine.recommendWithConflictDetection(
       {
         productIds: productsWithRules.map((p) => p.product.id),
-        productCategoryIds: productsWithRules.map(
-          (p) => p.product.categoryId
-        ),
+        productCategoryIds: productsWithRules.map((p) => p.product.categoryId),
       },
       productsWithRules.map((p) => p.product.name)
     );

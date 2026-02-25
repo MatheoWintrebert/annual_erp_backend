@@ -69,7 +69,6 @@ import {
 } from "@application/use-cases";
 import { Environment } from "@domain/types";
 import { SnakeCaseNamingStrategy } from "@libs/helpers";
-import { AuthGuard } from "@infrastructure/guards";
 
 const entities = [
   TableTypeormEntity,
@@ -159,9 +158,6 @@ import { UserTypeormEntity } from "@infrastructure/entities/user.typeorm.entity"
     GetPalettierTypesUseCase,
     GetPalettierTypeByIdUseCase,
     UpdatePalettierTypeUseCase,
-    { provide: APP_GUARD, useClass: AuthGuard } satisfies Provider,
-    ...(AuthConfiguration.controllers ?? []),
-    ...(UserConfiguration.controllers ?? []),
   ],
 })
 export class AppModule {

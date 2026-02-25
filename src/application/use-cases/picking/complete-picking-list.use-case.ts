@@ -17,16 +17,21 @@ import {
 } from "@domain/types";
 
 @Injectable()
-export class CompletePickingListUseCase
-  implements MutationUseCase<CompletePickingListInput, PickingCompletionResult>
-{
+export class CompletePickingListUseCase implements MutationUseCase<
+  CompletePickingListInput,
+  PickingCompletionResult
+> {
   constructor(
     private readonly pickingListRepository: PickingListRepository,
-    private readonly paletteRepository: PaletteRepository,
+    private readonly paletteRepository: PaletteRepository
   ) {}
 
-  async execute(input: CompletePickingListInput): Promise<PickingCompletionResult> {
-    const pickingList = await this.pickingListRepository.findById(input.pickingListId);
+  async execute(
+    input: CompletePickingListInput
+  ): Promise<PickingCompletionResult> {
+    const pickingList = await this.pickingListRepository.findById(
+      input.pickingListId
+    );
 
     if (!pickingList) {
       throw new PickingListNotFoundError(input.pickingListId);
@@ -44,17 +49,26 @@ export class CompletePickingListUseCase
       throw new InvalidPickingListStatusError(
         input.pickingListId,
         pickingList.status,
-        PickingListStatus.IN_PROGRESS,
+        PickingListStatus.IN_PROGRESS
       );
     }
 
     const pickedItems = input.items.filter((item) => item.status === "picked");
-    const skippedItems = input.items.filter((item) => item.status === "skipped");
+    const skippedItems = input.items.filter(
+      (item) => item.status === "skipped"
+    );
 
     // Load palette lot details for response building
-    const productIds = [...new Set(pickingList.items.map((item) => item.productId))];
-    const paletteLots = await this.paletteRepository.getPaletteLotsByProductIdsForFefo(productIds);
-    const paletteLotMap = new Map(paletteLots.map((lot) => [lot.paletteLotId, lot]));
+    const productIds = [
+      ...new Set(pickingList.items.map((item) => item.productId)),
+    ];
+    const paletteLots =
+      await this.paletteRepository.getPaletteLotsByProductIdsForFefo(
+        productIds
+      );
+    const paletteLotMap = new Map(
+      paletteLots.map((lot) => [lot.paletteLotId, lot])
+    );
 
     // Deduct stock for picked items
     const deductions: StockDeduction[] = [];
@@ -62,7 +76,7 @@ export class CompletePickingListUseCase
       if (item.pickedQuantity > 0) {
         await this.paletteRepository.deductPaletteLotQuantity(
           item.paletteLotId,
-          item.pickedQuantity,
+          item.pickedQuantity
         );
       }
 
@@ -97,17 +111,18 @@ export class CompletePickingListUseCase
       input.pickingListId,
       input.items.map((item) => ({
         id: item.pickingListItemId,
-        status: item.status === "picked"
-          ? PickingListItemStatus.PICKED
-          : PickingListItemStatus.SKIPPED,
+        status:
+          item.status === "picked"
+            ? PickingListItemStatus.PICKED
+            : PickingListItemStatus.SKIPPED,
         pickedQuantity: item.pickedQuantity,
-      })),
+      }))
     );
 
     // Update picking list status to COMPLETED
     await this.pickingListRepository.updateStatus(
       input.pickingListId,
-      PickingListStatus.COMPLETED,
+      PickingListStatus.COMPLETED
     );
 
     return {

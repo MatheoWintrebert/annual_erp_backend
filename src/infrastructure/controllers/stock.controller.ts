@@ -41,7 +41,7 @@ export class StockController {
     private readonly getPalettesUseCase: GetPalettesUseCase,
     private readonly getPaletteViolationsUseCase: GetPaletteViolationsUseCase,
     private readonly checkOnboardingViolationsUseCase: CheckOnboardingViolationsUseCase,
-    private readonly updatePalettePositionUseCase: UpdatePalettePositionUseCase,
+    private readonly updatePalettePositionUseCase: UpdatePalettePositionUseCase
   ) {}
 
   @Get()
@@ -114,7 +114,7 @@ export class StockController {
     type: HttpErrorDto,
   })
   async checkPlacementViolations(
-    @Body() dto: CheckPlacementViolationsRequestDto,
+    @Body() dto: CheckPlacementViolationsRequestDto
   ): Promise<PlacementViolationWarningResponseDto[]> {
     const warnings = await this.checkOnboardingViolationsUseCase.execute({
       productIds: dto.productIds,
@@ -122,7 +122,7 @@ export class StockController {
     });
 
     return warnings.map((w) =>
-      PlacementViolationWarningResponseDto.fromDomain(w),
+      PlacementViolationWarningResponseDto.fromDomain(w)
     );
   }
 
@@ -174,7 +174,7 @@ export class StockController {
   })
   async updatePalettePosition(
     @Param("id", ParseIntPipe) id: number,
-    @Body() dto: UpdatePalettePositionRequestDto,
+    @Body() dto: UpdatePalettePositionRequestDto
   ): Promise<void> {
     await this.updatePalettePositionUseCase.execute({
       paletteId: id,

@@ -11,24 +11,24 @@ export interface CheckOnboardingViolationsInput {
 }
 
 @Injectable()
-export class CheckOnboardingViolationsUseCase
-  implements
-    QueryUseCase<CheckOnboardingViolationsInput, PlacementViolationWarning[]>
-{
+export class CheckOnboardingViolationsUseCase implements QueryUseCase<
+  CheckOnboardingViolationsInput,
+  PlacementViolationWarning[]
+> {
   constructor(
     private readonly placementEngineService: PlacementEngineService,
-    private readonly palettierRepository: PalettierRepository,
+    private readonly palettierRepository: PalettierRepository
   ) {}
 
   async execute(
-    input: CheckOnboardingViolationsInput,
+    input: CheckOnboardingViolationsInput
   ): Promise<PlacementViolationWarning[]> {
     if (input.productIds.length === 0) {
       throw new ValidationError("productIds must not be empty");
     }
 
     const palettier = await this.palettierRepository.findById(
-      input.palettierId,
+      input.palettierId
     );
     if (!palettier) {
       throw new PalettierNotFoundError(input.palettierId);
@@ -36,7 +36,7 @@ export class CheckOnboardingViolationsUseCase
 
     return this.placementEngineService.checkViolationsForPalettier(
       input.productIds,
-      input.palettierId,
+      input.palettierId
     );
   }
 }

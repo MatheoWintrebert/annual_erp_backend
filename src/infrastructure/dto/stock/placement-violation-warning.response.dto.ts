@@ -23,7 +23,7 @@ export class PlacementViolationWarningResponseDto {
   reason!: string;
 
   static fromDomain(
-    warning: PlacementViolationWarning,
+    warning: PlacementViolationWarning
   ): PlacementViolationWarningResponseDto {
     const dto = new PlacementViolationWarningResponseDto();
     dto.ruleName = warning.ruleName;

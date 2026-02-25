@@ -1,5 +1,11 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { ArrayNotEmpty, IsArray, IsInt, IsPositive, Min } from "class-validator";
+import {
+  ArrayNotEmpty,
+  IsArray,
+  IsInt,
+  IsPositive,
+  Min,
+} from "class-validator";
 
 export class CheckPlacementViolationsRequestDto {
   @ApiProperty({

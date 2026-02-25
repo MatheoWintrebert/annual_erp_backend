@@ -15,7 +15,7 @@ export class AvailableStockQueryDto {
       ? value.split(",").map(Number)
       : Array.isArray(value)
         ? (value as unknown[]).map(Number)
-        : [Number(value)],
+        : [Number(value)]
   )
   productIds!: number[];
 }

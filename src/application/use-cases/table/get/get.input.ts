@@ -1,3 +1,3 @@
 export interface IGetTableInput {
-    tableId: number;
+  tableId: number;
 }

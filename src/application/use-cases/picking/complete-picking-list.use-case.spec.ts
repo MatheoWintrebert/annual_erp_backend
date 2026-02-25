@@ -23,7 +23,7 @@ describe("CompletePickingListUseCase", () => {
 
   const createMockPickingList = (
     status: PickingListStatus,
-    items: { id: number; productId: number; requestedQuantity: number }[] = [],
+    items: { id: number; productId: number; requestedQuantity: number }[] = []
   ): PickingListEntity =>
     new PickingListEntity({
       id: 1,
@@ -40,11 +40,14 @@ describe("CompletePickingListUseCase", () => {
             requestedQuantity: item.requestedQuantity,
             createdAt: now,
             updatedAt: now,
-          }),
+          })
       ),
     });
 
-  const createMockPaletteLotData = (paletteLotId: number, productId: number): PaletteLotFefoData => ({
+  const createMockPaletteLotData = (
+    paletteLotId: number,
+    productId: number
+  ): PaletteLotFefoData => ({
     paletteLotId,
     paletteId: 100,
     palettierId: 1,
@@ -76,7 +79,7 @@ describe("CompletePickingListUseCase", () => {
 
     useCase = new CompletePickingListUseCase(
       pickingListRepository,
-      paletteRepository,
+      paletteRepository
     );
   });
 
@@ -94,8 +97,18 @@ describe("CompletePickingListUseCase", () => {
     const input: CompletePickingListInput = {
       pickingListId: 1,
       items: [
-        { pickingListItemId: 1, paletteLotId: 101, status: "picked", pickedQuantity: 20 },
-        { pickingListItemId: 2, paletteLotId: 102, status: "picked", pickedQuantity: 15 },
+        {
+          pickingListItemId: 1,
+          paletteLotId: 101,
+          status: "picked",
+          pickedQuantity: 20,
+        },
+        {
+          pickingListItemId: 2,
+          paletteLotId: 102,
+          status: "picked",
+          pickedQuantity: 15,
+        },
       ],
     };
 
@@ -108,9 +121,18 @@ describe("CompletePickingListUseCase", () => {
     expect(result.deductions).toHaveLength(2);
     expect(result.discrepancies).toHaveLength(0);
     expect(paletteRepository.deductPaletteLotQuantity).toHaveBeenCalledTimes(2);
-    expect(paletteRepository.deductPaletteLotQuantity).toHaveBeenCalledWith(101, 20);
-    expect(paletteRepository.deductPaletteLotQuantity).toHaveBeenCalledWith(102, 15);
-    expect(pickingListRepository.updateStatus).toHaveBeenCalledWith(1, PickingListStatus.COMPLETED);
+    expect(paletteRepository.deductPaletteLotQuantity).toHaveBeenCalledWith(
+      101,
+      20
+    );
+    expect(paletteRepository.deductPaletteLotQuantity).toHaveBeenCalledWith(
+      102,
+      15
+    );
+    expect(pickingListRepository.updateStatus).toHaveBeenCalledWith(
+      1,
+      PickingListStatus.COMPLETED
+    );
   });
 
   it("should complete picking list with some skipped items", async () => {
@@ -127,8 +149,18 @@ describe("CompletePickingListUseCase", () => {
     const input: CompletePickingListInput = {
       pickingListId: 1,
       items: [
-        { pickingListItemId: 1, paletteLotId: 101, status: "picked", pickedQuantity: 20 },
-        { pickingListItemId: 2, paletteLotId: 102, status: "skipped", pickedQuantity: 0 },
+        {
+          pickingListItemId: 1,
+          paletteLotId: 101,
+          status: "picked",
+          pickedQuantity: 20,
+        },
+        {
+          pickingListItemId: 2,
+          paletteLotId: 102,
+          status: "skipped",
+          pickedQuantity: 0,
+        },
       ],
     };
 
@@ -138,9 +170,14 @@ describe("CompletePickingListUseCase", () => {
     expect(result.totalItemsSkipped).toBe(1);
     expect(result.deductions).toHaveLength(1);
     expect(result.discrepancies).toHaveLength(1);
-    expect(result.discrepancies[0].reason).toBe("Item skipped — not found at location");
+    expect(result.discrepancies[0].reason).toBe(
+      "Item skipped — not found at location"
+    );
     expect(paletteRepository.deductPaletteLotQuantity).toHaveBeenCalledTimes(1);
-    expect(paletteRepository.deductPaletteLotQuantity).toHaveBeenCalledWith(101, 20);
+    expect(paletteRepository.deductPaletteLotQuantity).toHaveBeenCalledWith(
+      101,
+      20
+    );
   });
 
   it("should throw PickingListNotFoundError for non-existent picking list", async () => {
@@ -148,10 +185,19 @@ describe("CompletePickingListUseCase", () => {
 
     const input: CompletePickingListInput = {
       pickingListId: 999,
-      items: [{ pickingListItemId: 1, paletteLotId: 101, status: "picked", pickedQuantity: 10 }],
+      items: [
+        {
+          pickingListItemId: 1,
+          paletteLotId: 101,
+          status: "picked",
+          pickedQuantity: 10,
+        },
+      ],
     };
 
-    await expect(useCase.execute(input)).rejects.toThrow(PickingListNotFoundError);
+    await expect(useCase.execute(input)).rejects.toThrow(
+      PickingListNotFoundError
+    );
   });
 
   it("should throw PickingListAlreadyCompletedError for COMPLETED status", async () => {
@@ -160,10 +206,19 @@ describe("CompletePickingListUseCase", () => {
 
     const input: CompletePickingListInput = {
       pickingListId: 1,
-      items: [{ pickingListItemId: 1, paletteLotId: 101, status: "picked", pickedQuantity: 10 }],
+      items: [
+        {
+          pickingListItemId: 1,
+          paletteLotId: 101,
+          status: "picked",
+          pickedQuantity: 10,
+        },
+      ],
     };
 
-    await expect(useCase.execute(input)).rejects.toThrow(PickingListAlreadyCompletedError);
+    await expect(useCase.execute(input)).rejects.toThrow(
+      PickingListAlreadyCompletedError
+    );
   });
 
   it("should throw PickingListAlreadyCancelledError for CANCELLED status", async () => {
@@ -172,10 +227,19 @@ describe("CompletePickingListUseCase", () => {
 
     const input: CompletePickingListInput = {
       pickingListId: 1,
-      items: [{ pickingListItemId: 1, paletteLotId: 101, status: "picked", pickedQuantity: 10 }],
+      items: [
+        {
+          pickingListItemId: 1,
+          paletteLotId: 101,
+          status: "picked",
+          pickedQuantity: 10,
+        },
+      ],
     };
 
-    await expect(useCase.execute(input)).rejects.toThrow(PickingListAlreadyCancelledError);
+    await expect(useCase.execute(input)).rejects.toThrow(
+      PickingListAlreadyCancelledError
+    );
   });
 
   it("should report discrepancies for skipped items", async () => {
@@ -190,7 +254,12 @@ describe("CompletePickingListUseCase", () => {
     const input: CompletePickingListInput = {
       pickingListId: 1,
       items: [
-        { pickingListItemId: 1, paletteLotId: 101, status: "skipped", pickedQuantity: 0 },
+        {
+          pickingListItemId: 1,
+          paletteLotId: 101,
+          status: "skipped",
+          pickedQuantity: 0,
+        },
       ],
     };
 
@@ -217,14 +286,22 @@ describe("CompletePickingListUseCase", () => {
     const input: CompletePickingListInput = {
       pickingListId: 1,
       items: [
-        { pickingListItemId: 1, paletteLotId: 101, status: "picked", pickedQuantity: 10 },
+        {
+          pickingListItemId: 1,
+          paletteLotId: 101,
+          status: "picked",
+          pickedQuantity: 10,
+        },
       ],
     };
 
     const result = await useCase.execute(input);
 
     expect(result.deductions[0].quantityDeducted).toBe(10);
-    expect(paletteRepository.deductPaletteLotQuantity).toHaveBeenCalledWith(101, 10);
+    expect(paletteRepository.deductPaletteLotQuantity).toHaveBeenCalledWith(
+      101,
+      10
+    );
     expect(pickingListRepository.updateItems).toHaveBeenCalledWith(1, [
       { id: 1, status: PickingListItemStatus.PICKED, pickedQuantity: 10 },
     ]);
@@ -244,8 +321,18 @@ describe("CompletePickingListUseCase", () => {
     const input: CompletePickingListInput = {
       pickingListId: 1,
       items: [
-        { pickingListItemId: 1, paletteLotId: 101, status: "skipped", pickedQuantity: 0 },
-        { pickingListItemId: 2, paletteLotId: 102, status: "skipped", pickedQuantity: 0 },
+        {
+          pickingListItemId: 1,
+          paletteLotId: 101,
+          status: "skipped",
+          pickedQuantity: 0,
+        },
+        {
+          pickingListItemId: 2,
+          paletteLotId: 102,
+          status: "skipped",
+          pickedQuantity: 0,
+        },
       ],
     };
 
@@ -257,6 +344,9 @@ describe("CompletePickingListUseCase", () => {
     expect(result.deductions).toHaveLength(0);
     expect(result.discrepancies).toHaveLength(2);
     expect(paletteRepository.deductPaletteLotQuantity).not.toHaveBeenCalled();
-    expect(pickingListRepository.updateStatus).toHaveBeenCalledWith(1, PickingListStatus.COMPLETED);
+    expect(pickingListRepository.updateStatus).toHaveBeenCalledWith(
+      1,
+      PickingListStatus.COMPLETED
+    );
   });
 });

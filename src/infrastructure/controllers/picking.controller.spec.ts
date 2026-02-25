@@ -149,18 +149,18 @@ describe("PickingController", () => {
 
     it("should propagate EmptyPickingListError for empty items array", async () => {
       createPickingListExecuteMock.mockRejectedValue(
-        new EmptyPickingListError(),
+        new EmptyPickingListError()
       );
 
-      await expect(
-        controller.create({ items: [] }),
-      ).rejects.toThrow(EmptyPickingListError);
+      await expect(controller.create({ items: [] })).rejects.toThrow(
+        EmptyPickingListError
+      );
     });
   });
 
   describe("generateRoute", () => {
     const createMockRouteItem = (
-      overrides: Partial<PickRouteItem> = {},
+      overrides: Partial<PickRouteItem> = {}
     ): PickRouteItem => ({
       pickingListItemId: 1,
       productId: 1,
@@ -203,11 +203,11 @@ describe("PickingController", () => {
 
     it("should propagate PickingListNotFoundError (404)", async () => {
       generatePickRouteExecuteMock.mockRejectedValue(
-        new PickingListNotFoundError(999),
+        new PickingListNotFoundError(999)
       );
 
       await expect(controller.generateRoute(999)).rejects.toThrow(
-        PickingListNotFoundError,
+        PickingListNotFoundError
       );
     });
 
@@ -216,12 +216,12 @@ describe("PickingController", () => {
         new InvalidPickingListStatusError(
           1,
           PickingListStatus.IN_PROGRESS,
-          PickingListStatus.CREATED,
-        ),
+          PickingListStatus.CREATED
+        )
       );
 
       await expect(controller.generateRoute(1)).rejects.toThrow(
-        InvalidPickingListStatusError,
+        InvalidPickingListStatusError
       );
     });
   });
@@ -251,7 +251,12 @@ describe("PickingController", () => {
 
       const result = await controller.complete(1, {
         items: [
-          { pickingListItemId: 1, paletteLotId: 12, status: "picked", pickedQuantity: 20 },
+          {
+            pickingListItemId: 1,
+            paletteLotId: 12,
+            status: "picked",
+            pickedQuantity: 20,
+          },
         ],
       });
 
@@ -263,32 +268,51 @@ describe("PickingController", () => {
       expect(completePickingListExecuteMock).toHaveBeenCalledWith({
         pickingListId: 1,
         items: [
-          { pickingListItemId: 1, paletteLotId: 12, status: "picked", pickedQuantity: 20 },
+          {
+            pickingListItemId: 1,
+            paletteLotId: 12,
+            status: "picked",
+            pickedQuantity: 20,
+          },
         ],
       });
     });
 
     it("should propagate PickingListNotFoundError (404)", async () => {
       completePickingListExecuteMock.mockRejectedValue(
-        new PickingListNotFoundError(999),
+        new PickingListNotFoundError(999)
       );
 
       await expect(
         controller.complete(999, {
-          items: [{ pickingListItemId: 1, paletteLotId: 12, status: "picked", pickedQuantity: 10 }],
-        }),
+          items: [
+            {
+              pickingListItemId: 1,
+              paletteLotId: 12,
+              status: "picked",
+              pickedQuantity: 10,
+            },
+          ],
+        })
       ).rejects.toThrow(PickingListNotFoundError);
     });
 
     it("should propagate PickingListAlreadyCompletedError (400)", async () => {
       completePickingListExecuteMock.mockRejectedValue(
-        new PickingListAlreadyCompletedError(1),
+        new PickingListAlreadyCompletedError(1)
       );
 
       await expect(
         controller.complete(1, {
-          items: [{ pickingListItemId: 1, paletteLotId: 12, status: "picked", pickedQuantity: 10 }],
-        }),
+          items: [
+            {
+              pickingListItemId: 1,
+              paletteLotId: 12,
+              status: "picked",
+              pickedQuantity: 10,
+            },
+          ],
+        })
       ).rejects.toThrow(PickingListAlreadyCompletedError);
     });
   });
@@ -309,21 +333,21 @@ describe("PickingController", () => {
 
     it("should propagate PickingListNotFoundError (404)", async () => {
       cancelPickingListExecuteMock.mockRejectedValue(
-        new PickingListNotFoundError(999),
+        new PickingListNotFoundError(999)
       );
 
       await expect(controller.cancel(999)).rejects.toThrow(
-        PickingListNotFoundError,
+        PickingListNotFoundError
       );
     });
 
     it("should propagate error for already completed/cancelled (400)", async () => {
       cancelPickingListExecuteMock.mockRejectedValue(
-        new PickingListAlreadyCancelledError(1),
+        new PickingListAlreadyCancelledError(1)
       );
 
       await expect(controller.cancel(1)).rejects.toThrow(
-        PickingListAlreadyCancelledError,
+        PickingListAlreadyCancelledError
       );
     });
   });

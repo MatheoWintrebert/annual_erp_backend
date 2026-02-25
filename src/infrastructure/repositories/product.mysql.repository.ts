@@ -255,14 +255,16 @@ export class ProductMysqlRepository implements ProductRepository {
     return Number(result?.count ?? 0);
   }
 
-  async findAllWithThresholds(): Promise<{
-    id: number;
-    name: string;
-    reference: string;
-    minimumStock: number | null;
-    expiryAlertThreshold: number | null;
-    unitOfMeasureName: string;
-  }[]> {
+  async findAllWithThresholds(): Promise<
+    {
+      id: number;
+      name: string;
+      reference: string;
+      minimumStock: number | null;
+      expiryAlertThreshold: number | null;
+      unitOfMeasureName: string;
+    }[]
+  > {
     const rows: {
       id: number;
       name: string;

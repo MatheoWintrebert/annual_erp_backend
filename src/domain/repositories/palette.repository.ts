@@ -1,6 +1,10 @@
 import type { EntityManager } from "typeorm";
 import { PaletteEntity } from "@domain/entities";
-import { PaletteLotFefoData, PaletteWithDetails, ProductStock } from "@domain/types";
+import {
+  PaletteLotFefoData,
+  PaletteWithDetails,
+  ProductStock,
+} from "@domain/types";
 
 export interface CreatePaletteData {
   palettierId: number;
@@ -69,7 +73,14 @@ export abstract class PaletteRepository {
 
   abstract getStockWithExpiryByProductIds(
     productIds: number[]
-  ): Promise<{ productId: number; lotId: number; quantity: number; expiryDate: Date | null }[]>;
+  ): Promise<
+    {
+      productId: number;
+      lotId: number;
+      quantity: number;
+      expiryDate: Date | null;
+    }[]
+  >;
 
   abstract getStockQuantityByProductIds(
     productIds: number[]

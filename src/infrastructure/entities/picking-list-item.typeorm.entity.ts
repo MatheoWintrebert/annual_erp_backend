@@ -37,7 +37,12 @@ export class PickingListItemTypeormEntity
   @Column({ name: "requested_quantity", type: "int" })
   requestedQuantity!: number;
 
-  @Column({ name: "picked_quantity", type: "int", nullable: true, default: null })
+  @Column({
+    name: "picked_quantity",
+    type: "int",
+    nullable: true,
+    default: null,
+  })
   pickedQuantity!: number | null;
 
   @Column({

@@ -134,10 +134,7 @@ export class PlacementEngineService {
           const existingCategoryIds =
             data.categoryIdsMap.get(palettierId) ?? [];
           const config = rwc.productIncompatibilityConfig;
-          if (
-            config &&
-            existingCategoryIds.includes(config.categoryId)
-          ) {
+          if (config && existingCategoryIds.includes(config.categoryId)) {
             warnings.push({
               ruleName: rwc.rule.name,
               ruleType: RuleType.PRODUCT_INCOMPATIBILITY,
@@ -337,10 +334,14 @@ export class PlacementEngineService {
     return groups.map((group) => {
       if (group.compatiblePalettierIds.size === 0) {
         // No palettier satisfies the rules for these products
-        const ruleNames = this.describeBlockingRules(allRules, group.productIds);
-        const reason = ruleNames.length > 0
-          ? `No palettier satisfies the rules for ${group.productNames.join(", ")} (blocked by: ${ruleNames.join(", ")})`
-          : `No palettier has available positions for ${group.productNames.join(", ")} — all slots are occupied`;
+        const ruleNames = this.describeBlockingRules(
+          allRules,
+          group.productIds
+        );
+        const reason =
+          ruleNames.length > 0
+            ? `No palettier satisfies the rules for ${group.productNames.join(", ")} (blocked by: ${ruleNames.join(", ")})`
+            : `No palettier has available positions for ${group.productNames.join(", ")} — all slots are occupied`;
         return {
           productIds: group.productIds,
           productNames: group.productNames,
@@ -465,9 +466,7 @@ export class PlacementEngineService {
             descriptions.push(rwc.rule.name);
             break;
           case RuleType.PRODUCT_INCOMPATIBILITY:
-            descriptions.push(
-              `incompatible category (${rwc.rule.name})`
-            );
+            descriptions.push(`incompatible category (${rwc.rule.name})`);
             break;
           case RuleType.ZONE_PRIORITY:
             break;

@@ -9,9 +9,10 @@ import {
 } from "@domain/services";
 
 @Injectable()
-export class GetDashboardAlertsUseCase
-  implements QueryUseCase<void, DashboardAlerts>
-{
+export class GetDashboardAlertsUseCase implements QueryUseCase<
+  void,
+  DashboardAlerts
+> {
   constructor(
     private readonly productRepository: ProductRepository,
     private readonly paletteRepository: PaletteRepository,
@@ -57,7 +58,9 @@ export class GetDashboardAlertsUseCase
 
     const [stockWithExpiry, stockQuantities] = await Promise.all([
       expiryProductIds.length > 0
-        ? this.paletteRepository.getStockWithExpiryByProductIds(expiryProductIds)
+        ? this.paletteRepository.getStockWithExpiryByProductIds(
+            expiryProductIds
+          )
         : Promise.resolve([]),
       stockProductIds.length > 0
         ? this.paletteRepository.getStockQuantityByProductIds(stockProductIds)

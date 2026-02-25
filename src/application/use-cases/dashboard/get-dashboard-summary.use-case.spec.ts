@@ -1,13 +1,25 @@
 import { GetDashboardSummaryUseCase } from "./get-dashboard-summary.use-case";
-import type { PaletteRepository, PalettierRepository, ProductRepository, RuleRepository } from "@domain/repositories";
+import type {
+  PaletteRepository,
+  PalettierRepository,
+  ProductRepository,
+  RuleRepository,
+} from "@domain/repositories";
 
 describe("GetDashboardSummaryUseCase", () => {
   let useCase: GetDashboardSummaryUseCase;
   let paletteRepository: jest.Mocked<
-    Pick<PaletteRepository, "countActivePalettes" | "countPalettesCreatedBetween">
+    Pick<
+      PaletteRepository,
+      "countActivePalettes" | "countPalettesCreatedBetween"
+    >
   >;
-  let productRepository: jest.Mocked<Pick<ProductRepository, "countActiveProducts">>;
-  let palettierRepository: jest.Mocked<Pick<PalettierRepository, "getCapacitySummary">>;
+  let productRepository: jest.Mocked<
+    Pick<ProductRepository, "countActiveProducts">
+  >;
+  let palettierRepository: jest.Mocked<
+    Pick<PalettierRepository, "getCapacitySummary">
+  >;
   let ruleRepository: jest.Mocked<Pick<RuleRepository, "countActiveRules">>;
 
   beforeEach(() => {
@@ -21,7 +33,9 @@ describe("GetDashboardSummaryUseCase", () => {
     };
 
     palettierRepository = {
-      getCapacitySummary: jest.fn().mockResolvedValue({ count: 0, totalCapacity: 0 }),
+      getCapacitySummary: jest
+        .fn()
+        .mockResolvedValue({ count: 0, totalCapacity: 0 }),
     };
 
     ruleRepository = {
@@ -39,7 +53,10 @@ describe("GetDashboardSummaryUseCase", () => {
   it("should return correct stock summary with palettes and products", async () => {
     paletteRepository.countActivePalettes.mockResolvedValue(42);
     productRepository.countActiveProducts.mockResolvedValue(15);
-    palettierRepository.getCapacitySummary.mockResolvedValue({ count: 2, totalCapacity: 120 });
+    palettierRepository.getCapacitySummary.mockResolvedValue({
+      count: 2,
+      totalCapacity: 120,
+    });
 
     const result = await useCase.execute();
 
@@ -50,7 +67,10 @@ describe("GetDashboardSummaryUseCase", () => {
   });
 
   it("should return capacityUtilization = 0 when no palettiers exist", async () => {
-    palettierRepository.getCapacitySummary.mockResolvedValue({ count: 0, totalCapacity: 0 });
+    palettierRepository.getCapacitySummary.mockResolvedValue({
+      count: 0,
+      totalCapacity: 0,
+    });
 
     const result = await useCase.execute();
 
@@ -59,7 +79,10 @@ describe("GetDashboardSummaryUseCase", () => {
   });
 
   it("should return capacityUtilization = 0 when totalCapacity is 0", async () => {
-    palettierRepository.getCapacitySummary.mockResolvedValue({ count: 1, totalCapacity: 0 });
+    palettierRepository.getCapacitySummary.mockResolvedValue({
+      count: 1,
+      totalCapacity: 0,
+    });
 
     const result = await useCase.execute();
 
@@ -111,7 +134,10 @@ describe("GetDashboardSummaryUseCase", () => {
   it("should correctly identify completed setup steps", async () => {
     paletteRepository.countActivePalettes.mockResolvedValue(10);
     productRepository.countActiveProducts.mockResolvedValue(5);
-    palettierRepository.getCapacitySummary.mockResolvedValue({ count: 1, totalCapacity: 40 });
+    palettierRepository.getCapacitySummary.mockResolvedValue({
+      count: 1,
+      totalCapacity: 40,
+    });
     ruleRepository.countActiveRules.mockResolvedValue(3);
 
     const result = await useCase.execute();

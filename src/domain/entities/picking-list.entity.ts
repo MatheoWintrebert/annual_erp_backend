@@ -8,9 +8,7 @@ export class PickingListEntity implements IPickingList {
   public readonly createdAt: Date;
   public readonly updatedAt: Date;
 
-  constructor(
-    params: IPickingList & { items?: PickingListItemEntity[] },
-  ) {
+  constructor(params: IPickingList & { items?: PickingListItemEntity[] }) {
     this.id = params.id;
     this.status = params.status;
     this.items = params.items ?? [];

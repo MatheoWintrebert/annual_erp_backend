@@ -11,7 +11,10 @@ import {
 import { PickingListItemTypeormEntity } from "./picking-list-item.typeorm.entity";
 
 @Entity("picking_lists")
-export class PickingListTypeormEntity extends BaseEntity implements IPickingList {
+export class PickingListTypeormEntity
+  extends BaseEntity
+  implements IPickingList
+{
   @PrimaryGeneratedColumn()
   id!: number;
 

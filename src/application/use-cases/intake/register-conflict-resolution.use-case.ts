@@ -54,13 +54,10 @@ export interface RegisterConflictResolutionOutput {
 }
 
 @Injectable()
-export class RegisterConflictResolutionUseCase
-  implements
-    MutationUseCase<
-      RegisterConflictResolutionInput,
-      RegisterConflictResolutionOutput
-    >
-{
+export class RegisterConflictResolutionUseCase implements MutationUseCase<
+  RegisterConflictResolutionInput,
+  RegisterConflictResolutionOutput
+> {
   constructor(
     private readonly productRepository: ProductRepository,
     private readonly palettierRepository: PalettierRepository,

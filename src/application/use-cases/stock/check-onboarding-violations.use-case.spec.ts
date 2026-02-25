@@ -41,7 +41,7 @@ describe("CheckOnboardingViolationsUseCase", () => {
 
     useCase = new CheckOnboardingViolationsUseCase(
       placementEngineService as unknown as PlacementEngineService,
-      palettierRepository as unknown as PalettierRepository,
+      palettierRepository as unknown as PalettierRepository
     );
   });
 
@@ -50,13 +50,14 @@ describe("CheckOnboardingViolationsUseCase", () => {
       {
         ruleName: "Cold Storage Required",
         ruleType: RuleType.STORAGE_CONDITION,
-        reason: 'Storage condition "Cold Storage Required" is not satisfied by palettier "Dry Storage B"',
+        reason:
+          'Storage condition "Cold Storage Required" is not satisfied by palettier "Dry Storage B"',
       },
     ];
 
     palettierRepository.findById.mockResolvedValue(mockPalettier);
     placementEngineService.checkViolationsForPalettier.mockResolvedValue(
-      violations,
+      violations
     );
 
     const input: CheckOnboardingViolationsInput = {
@@ -68,7 +69,7 @@ describe("CheckOnboardingViolationsUseCase", () => {
 
     expect(result).toEqual(violations);
     expect(
-      placementEngineService.checkViolationsForPalettier,
+      placementEngineService.checkViolationsForPalettier
     ).toHaveBeenCalledWith([1, 5], 3);
   });
 
@@ -91,11 +92,11 @@ describe("CheckOnboardingViolationsUseCase", () => {
       useCase.execute({
         productIds: [1],
         palettierId: 999,
-      }),
+      })
     ).rejects.toThrow(PalettierNotFoundError);
 
     expect(
-      placementEngineService.checkViolationsForPalettier,
+      placementEngineService.checkViolationsForPalettier
     ).not.toHaveBeenCalled();
   });
 
@@ -104,12 +105,12 @@ describe("CheckOnboardingViolationsUseCase", () => {
       useCase.execute({
         productIds: [],
         palettierId: 3,
-      }),
+      })
     ).rejects.toThrow(ValidationError);
 
     expect(palettierRepository.findById).not.toHaveBeenCalled();
     expect(
-      placementEngineService.checkViolationsForPalettier,
+      placementEngineService.checkViolationsForPalettier
     ).not.toHaveBeenCalled();
   });
 });

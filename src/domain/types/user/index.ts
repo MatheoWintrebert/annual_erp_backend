@@ -1,2 +1,2 @@
-export * from './user.interface';
-export * from './short-user.interface';
+export * from "./user.interface";
+export * from "./short-user.interface";

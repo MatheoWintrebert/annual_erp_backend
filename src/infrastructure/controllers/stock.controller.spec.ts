@@ -103,11 +103,11 @@ describe("StockController", () => {
 
     it("should propagate errors from use case", async () => {
       getViolationsExecuteMock.mockRejectedValue(
-        new Error("Database connection lost"),
+        new Error("Database connection lost")
       );
 
       await expect(controller.getViolations()).rejects.toThrow(
-        "Database connection lost",
+        "Database connection lost"
       );
     });
   });

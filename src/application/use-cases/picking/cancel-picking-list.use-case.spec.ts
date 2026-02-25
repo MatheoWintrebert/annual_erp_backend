@@ -14,7 +14,9 @@ describe("CancelPickingListUseCase", () => {
 
   const now = new Date();
 
-  const createMockPickingList = (status: PickingListStatus): PickingListEntity =>
+  const createMockPickingList = (
+    status: PickingListStatus
+  ): PickingListEntity =>
     new PickingListEntity({
       id: 1,
       status,
@@ -42,7 +44,10 @@ describe("CancelPickingListUseCase", () => {
 
     expect(result.pickingListId).toBe(1);
     expect(result.status).toBe(PickingListStatus.CANCELLED);
-    expect(pickingListRepository.updateStatus).toHaveBeenCalledWith(1, PickingListStatus.CANCELLED);
+    expect(pickingListRepository.updateStatus).toHaveBeenCalledWith(
+      1,
+      PickingListStatus.CANCELLED
+    );
   });
 
   it("should cancel picking list with IN_PROGRESS status", async () => {
@@ -53,27 +58,36 @@ describe("CancelPickingListUseCase", () => {
 
     expect(result.pickingListId).toBe(1);
     expect(result.status).toBe(PickingListStatus.CANCELLED);
-    expect(pickingListRepository.updateStatus).toHaveBeenCalledWith(1, PickingListStatus.CANCELLED);
+    expect(pickingListRepository.updateStatus).toHaveBeenCalledWith(
+      1,
+      PickingListStatus.CANCELLED
+    );
   });
 
   it("should throw PickingListNotFoundError for non-existent picking list", async () => {
     pickingListRepository.findById.mockResolvedValue(null);
 
-    await expect(useCase.execute(999)).rejects.toThrow(PickingListNotFoundError);
+    await expect(useCase.execute(999)).rejects.toThrow(
+      PickingListNotFoundError
+    );
   });
 
   it("should throw PickingListAlreadyCompletedError for COMPLETED status", async () => {
     const pickingList = createMockPickingList(PickingListStatus.COMPLETED);
     pickingListRepository.findById.mockResolvedValue(pickingList);
 
-    await expect(useCase.execute(1)).rejects.toThrow(PickingListAlreadyCompletedError);
+    await expect(useCase.execute(1)).rejects.toThrow(
+      PickingListAlreadyCompletedError
+    );
   });
 
   it("should throw PickingListAlreadyCancelledError for CANCELLED status", async () => {
     const pickingList = createMockPickingList(PickingListStatus.CANCELLED);
     pickingListRepository.findById.mockResolvedValue(pickingList);
 
-    await expect(useCase.execute(1)).rejects.toThrow(PickingListAlreadyCancelledError);
+    await expect(useCase.execute(1)).rejects.toThrow(
+      PickingListAlreadyCancelledError
+    );
   });
 
   it("should not call any stock deduction method", async () => {

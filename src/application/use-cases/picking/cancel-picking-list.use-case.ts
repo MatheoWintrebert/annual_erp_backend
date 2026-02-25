@@ -12,15 +12,15 @@ import {
 } from "@domain/types";
 
 @Injectable()
-export class CancelPickingListUseCase
-  implements MutationUseCase<number, CancelPickingListResult>
-{
-  constructor(
-    private readonly pickingListRepository: PickingListRepository,
-  ) {}
+export class CancelPickingListUseCase implements MutationUseCase<
+  number,
+  CancelPickingListResult
+> {
+  constructor(private readonly pickingListRepository: PickingListRepository) {}
 
   async execute(pickingListId: number): Promise<CancelPickingListResult> {
-    const pickingList = await this.pickingListRepository.findById(pickingListId);
+    const pickingList =
+      await this.pickingListRepository.findById(pickingListId);
 
     if (!pickingList) {
       throw new PickingListNotFoundError(pickingListId);
@@ -36,7 +36,7 @@ export class CancelPickingListUseCase
 
     await this.pickingListRepository.updateStatus(
       pickingListId,
-      PickingListStatus.CANCELLED,
+      PickingListStatus.CANCELLED
     );
 
     return {

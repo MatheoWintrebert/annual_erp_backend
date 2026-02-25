@@ -26,7 +26,10 @@ export class ExpiryAlertDto {
   @ApiProperty({ example: 7 })
   expiryAlertThreshold!: number;
 
-  @ApiProperty({ enum: ["expired", "critical", "warning"], example: "critical" })
+  @ApiProperty({
+    enum: ["expired", "critical", "warning"],
+    example: "critical",
+  })
   severity!: string;
 }
 

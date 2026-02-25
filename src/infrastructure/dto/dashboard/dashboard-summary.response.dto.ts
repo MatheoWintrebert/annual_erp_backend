@@ -22,7 +22,10 @@ export class IntakeActivityDto {
   @ApiProperty({ example: 3 })
   palettesReceivedYesterday!: number;
 
-  @ApiProperty({ enum: ["increasing", "decreasing", "stable"], example: "increasing" })
+  @ApiProperty({
+    enum: ["increasing", "decreasing", "stable"],
+    example: "increasing",
+  })
   trend!: string;
 }
 

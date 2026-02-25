@@ -40,8 +40,7 @@ export class PlacementResultResponseDto {
   recommendation?: PlacementRecommendationResponseDto;
 
   @ApiPropertyOptional({
-    example:
-      "Product A needs cold storage, Product B needs dry storage",
+    example: "Product A needs cold storage, Product B needs dry storage",
   })
   conflictExplanation?: string;
 

@@ -10,12 +10,13 @@ import {
 } from "@domain/errors";
 
 @Injectable()
-export class CreatePickingListUseCase
-  implements MutationUseCase<CreatePickingListInput, PickingListEntity>
-{
+export class CreatePickingListUseCase implements MutationUseCase<
+  CreatePickingListInput,
+  PickingListEntity
+> {
   constructor(
     private readonly pickingListRepository: PickingListRepository,
-    private readonly paletteRepository: PaletteRepository,
+    private readonly paletteRepository: PaletteRepository
   ) {}
 
   async execute(input: CreatePickingListInput): Promise<PickingListEntity> {
@@ -54,7 +55,8 @@ export class CreatePickingListUseCase
       if (item.requestedQuantity > available) {
         insufficientItems.push({
           productId: item.productId,
-          productName: stock?.productName ?? `Product ${String(item.productId)}`,
+          productName:
+            stock?.productName ?? `Product ${String(item.productId)}`,
           requestedQuantity: item.requestedQuantity,
           availableQuantity: available,
         });

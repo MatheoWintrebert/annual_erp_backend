@@ -12,12 +12,13 @@ import {
 } from "@domain/types";
 
 @Injectable()
-export class GeneratePickRouteUseCase
-  implements MutationUseCase<number, PickRouteItem[]>
-{
+export class GeneratePickRouteUseCase implements MutationUseCase<
+  number,
+  PickRouteItem[]
+> {
   constructor(
     private readonly pickingListRepository: PickingListRepository,
-    private readonly fefoService: FefoService,
+    private readonly fefoService: FefoService
   ) {}
 
   async execute(pickingListId: number): Promise<PickRouteItem[]> {
@@ -32,12 +33,12 @@ export class GeneratePickRouteUseCase
       throw new InvalidPickingListStatusError(
         pickingListId,
         pickingList.status,
-        PickingListStatus.CREATED,
+        PickingListStatus.CREATED
       );
     }
 
     const itemIds = new Map(
-      pickingList.items.map((item) => [item.productId, item.id]),
+      pickingList.items.map((item) => [item.productId, item.id])
     );
 
     const items = pickingList.items.map((item) => ({
@@ -49,7 +50,7 @@ export class GeneratePickRouteUseCase
 
     await this.pickingListRepository.updateStatus(
       pickingListId,
-      PickingListStatus.IN_PROGRESS,
+      PickingListStatus.IN_PROGRESS
     );
 
     return route;

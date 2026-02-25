@@ -1,4 +1,8 @@
-import { CreatePickingListInput, PickingListItemStatus, PickingListStatus } from "@domain/types";
+import {
+  CreatePickingListInput,
+  PickingListItemStatus,
+  PickingListStatus,
+} from "@domain/types";
 import { PickingListEntity } from "@domain/entities";
 
 export abstract class PickingListRepository {
@@ -7,6 +11,10 @@ export abstract class PickingListRepository {
   abstract updateStatus(id: number, status: PickingListStatus): Promise<void>;
   abstract updateItems(
     pickingListId: number,
-    items: { id: number; status: PickingListItemStatus; pickedQuantity: number | null }[]
+    items: {
+      id: number;
+      status: PickingListItemStatus;
+      pickedQuantity: number | null;
+    }[]
   ): Promise<void>;
 }

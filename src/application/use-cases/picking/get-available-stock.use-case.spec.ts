@@ -33,14 +33,14 @@ describe("GetAvailableStockUseCase", () => {
     ];
 
     paletteRepository.getAvailableStockByProductIds.mockResolvedValue(
-      mockStock,
+      mockStock
     );
 
     const result = await useCase.execute([1, 2]);
 
     expect(result).toEqual(mockStock);
     expect(
-      paletteRepository.getAvailableStockByProductIds,
+      paletteRepository.getAvailableStockByProductIds
     ).toHaveBeenCalledWith([1, 2]);
   });
 
@@ -49,7 +49,7 @@ describe("GetAvailableStockUseCase", () => {
 
     expect(result).toEqual([]);
     expect(
-      paletteRepository.getAvailableStockByProductIds,
+      paletteRepository.getAvailableStockByProductIds
     ).not.toHaveBeenCalled();
   });
 
@@ -65,7 +65,7 @@ describe("GetAvailableStockUseCase", () => {
     ];
 
     paletteRepository.getAvailableStockByProductIds.mockResolvedValue(
-      mockStock,
+      mockStock
     );
 
     const result = await useCase.execute([1]);
@@ -86,7 +86,7 @@ describe("GetAvailableStockUseCase", () => {
     ];
 
     paletteRepository.getAvailableStockByProductIds.mockResolvedValue(
-      mockStock,
+      mockStock
     );
 
     const result = await useCase.execute([1]);
@@ -94,7 +94,7 @@ describe("GetAvailableStockUseCase", () => {
     expect(result).toHaveLength(1);
     expect(result[0].availableQuantity).toBe(300);
     expect(
-      paletteRepository.getAvailableStockByProductIds,
+      paletteRepository.getAvailableStockByProductIds
     ).toHaveBeenCalledWith([1]);
   });
 });
