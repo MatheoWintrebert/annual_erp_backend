@@ -43,6 +43,7 @@ import {
   UnitOfMeasureTypeormEntity,
   PickingListTypeormEntity,
   PickingListItemTypeormEntity,
+  UserTypeormEntity,
 } from "@infrastructure/entities";
 import {
   CompanySettingsMysqlRepository,
@@ -97,7 +98,6 @@ import { UserMysqlRepository } from "@infrastructure/repositories";
 import { RegisterUseCase } from "@application/use-cases/auth/register/register.use-case";
 import AuthConfiguration from "./auth.configuration";
 import UserConfiguration from "./user.configuration";
-import { UserTypeormEntity } from "@infrastructure/entities/user.typeorm.entity";
 
 @Module({
   imports: [
