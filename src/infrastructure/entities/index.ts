@@ -1,4 +1,3 @@
-export * from "./table.typeorm.entity";
 export * from "./company-settings.typeorm.entity";
 export * from "./palettier-type.typeorm.entity";
 export * from "./palettier.typeorm.entity";

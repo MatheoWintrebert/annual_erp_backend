@@ -1,4 +1,4 @@
-import { PostUserUseCase } from "@application/use-cases";
+import { GetUserUseCase, PostUserUseCase } from "@application/use-cases";
 import { UserRepository } from "@domain/repositories";
 import { UserController } from "@infrastructure/controllers";
 import { UserMysqlRepository } from "@infrastructure/repositories";
@@ -14,6 +14,12 @@ export default {
       provide: PostUserUseCase,
       useFactory: (userRepository: UserRepository) =>
         new PostUserUseCase(userRepository),
+      inject: [UserRepository],
+    },
+    {
+      provide: GetUserUseCase,
+      useFactory: (userRepository: UserRepository) =>
+        new GetUserUseCase(userRepository),
       inject: [UserRepository],
     },
   ],

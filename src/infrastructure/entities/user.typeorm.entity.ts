@@ -28,7 +28,7 @@ export class UserTypeormEntity extends BaseEntity implements IUser {
   @Column({ name: "is_active", default: true })
   isActive!: boolean;
 
-  @Column({ name: "two_factor_secret", nullable: true })
+  @Column({ name: "two_factor_secret", type: "varchar", nullable: true })
   twoFactorSecret?: string | null;
 
   @Column({ name: "is_two_factor_enabled", default: false })

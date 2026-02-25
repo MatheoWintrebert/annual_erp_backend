@@ -59,12 +59,12 @@ export class Initial1769425630332 implements MigrationInterface {
           },
           {
             name: "created_at",
-            type: "datetime",
+            type: "datetime(6)",
             default: "CURRENT_TIMESTAMP(6)",
           },
           {
             name: "updated_at",
-            type: "datetime",
+            type: "datetime(6)",
             default: "CURRENT_TIMESTAMP(6)",
             onUpdate: "CURRENT_TIMESTAMP(6)",
           },

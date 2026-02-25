@@ -39,7 +39,6 @@ import {
   RuleTypeormEntity,
   RuleZonePriorityConfigTypeormEntity,
   RuleZonePriorityPalettierTypeormEntity,
-  TableTypeormEntity,
   UnitOfMeasureTypeormEntity,
   PickingListTypeormEntity,
   PickingListItemTypeormEntity,
@@ -72,7 +71,6 @@ import { Environment } from "@domain/types";
 import { SnakeCaseNamingStrategy } from "@libs/helpers";
 
 const entities = [
-  TableTypeormEntity,
   UserTypeormEntity,
   CompanySettingsTypeormEntity,
   UnitOfMeasureTypeormEntity,

@@ -1,4 +1,8 @@
-import { LoginUseCase, RegisterUseCase } from "@application/use-cases";
+import {
+  LoginUseCase,
+  RegisterUseCase,
+  VerifyTwoFactorUseCase,
+} from "@application/use-cases";
 import { FullLoginUseCase } from "@application/use-cases/auth/full-login";
 import { UserRepository } from "@domain/repositories";
 import { AuthController } from "@infrastructure/controllers";
@@ -24,6 +28,12 @@ export default {
       provide: RegisterUseCase,
       useFactory: (userRepository: UserRepository, jwtService: JwtService) =>
         new RegisterUseCase(userRepository, jwtService),
+      inject: [UserRepository, JwtService],
+    },
+    {
+      provide: VerifyTwoFactorUseCase,
+      useFactory: (userRepository: UserRepository, jwtService: JwtService) =>
+        new VerifyTwoFactorUseCase(userRepository, jwtService),
       inject: [UserRepository, JwtService],
     },
   ],
