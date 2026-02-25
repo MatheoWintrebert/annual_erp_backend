@@ -512,9 +512,7 @@ export class PaletteMysqlRepository implements PaletteRepository {
     }
   }
 
-  async getStockWithExpiryByProductIds(
-    productIds: number[]
-  ): Promise<
+  async getStockWithExpiryByProductIds(productIds: number[]): Promise<
     {
       productId: number;
       lotId: number;

@@ -71,9 +71,7 @@ export abstract class PaletteRepository {
     transactionManager?: EntityManager
   ): Promise<void>;
 
-  abstract getStockWithExpiryByProductIds(
-    productIds: number[]
-  ): Promise<
+  abstract getStockWithExpiryByProductIds(productIds: number[]): Promise<
     {
       productId: number;
       lotId: number;
