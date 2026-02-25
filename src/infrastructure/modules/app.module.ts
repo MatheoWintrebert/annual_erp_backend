@@ -131,6 +131,8 @@ import { UserTypeormEntity } from "@infrastructure/entities/user.typeorm.entity"
     CompanySettingsController,
     PalettierController,
     PalettierTypeController,
+    ...(AuthConfiguration.controllers ?? []),
+    ...(UserConfiguration.controllers ?? []),
   ],
   providers: [
     ...(AuthConfiguration.providers ?? []),
