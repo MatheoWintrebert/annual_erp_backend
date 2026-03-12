@@ -21,6 +21,6 @@ export default new DataSource({
   logging: false,
   synchronize: false,
   entities: [(isProduction ? 'dist/' : '') + 'src/infrastructure/**/**.entity{.ts,.js}'],
-  migrations: [(isProduction ? 'dist/' : '') + 'src/migrations/**/*{.ts,.js}'],
+  migrations: [(isProduction ? 'dist/' : '') + 'src/database/migrations/**/*{.ts,.js}'],
   migrationsTableName: 'migrations',
 });
