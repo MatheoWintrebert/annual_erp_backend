@@ -1,5 +1,6 @@
 import { Body, Controller, Post, UseGuards } from "@nestjs/common";
 import {
+  FullLoginRequestDto,
   LoginRequestDto,
   LoginResponseDto,
   RegisterRequestDto,
@@ -15,13 +16,15 @@ import {
 import { Auth2FaGuard } from "@infrastructure/guards/auth-2fa.guard";
 import { GetUserInfo } from "@infrastructure/decorators";
 import { IUserInfo } from "@domain/types";
+import { FullLoginUseCase } from "@application/use-cases/auth/full-login";
 
 @Controller("auth")
 export class AuthController {
   constructor(
     private readonly loginUseCase: LoginUseCase,
     private readonly registerUseCase: RegisterUseCase,
-    private readonly verifyTwoFactorUseCase: VerifyTwoFactorUseCase
+    private readonly verifyTwoFactorUseCase: VerifyTwoFactorUseCase,
+    private readonly fullLoginUseCase: FullLoginUseCase,
   ) {}
 
   @Post("login")
@@ -34,9 +37,9 @@ export class AuthController {
 
   @Post("full-login")
   async fullLogin(
-    @Body() loginDto: LoginRequestDto
+    @Body() loginDto: FullLoginRequestDto
   ): Promise<LoginResponseDto> {
-    const result = await this.loginUseCase.execute(loginDto);
+    const result = await this.fullLoginUseCase.execute(loginDto);
     return {
       token: result.token,
     };

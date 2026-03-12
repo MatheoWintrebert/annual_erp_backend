@@ -18,13 +18,14 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
-    "migration:run": "NODE_ENV=local npx typeorm migration:run -- -d ./ormconfig.ts",
+    "migration:run": "NODE_ENV=local npx ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js migration:run -d ./ormconfig.ts",
     "migration:run:prod": "NODE_ENV=production ts-node -r module-alias/register -r tsconfig-paths/register ./node_modules/typeorm/cli.js migration:run -d ./dist/ormconfig.js",
     "migration:generate": "NODE_ENV=local npx typeorm -- -d ./ormconfig.ts migration:generate ./src/database/migrations/$npm_config_name",
     "migration:make": "NODE_ENV=local npx typeorm -- migration:create ./src/database/migrations/$npm_config_name",
     "migration:revert": "NODE_ENV=local npx typeorm -- -d ./ormconfig.ts migration:revert",
     "migration:revert:prod": "NODE_ENV=production npx typeorm -- -d ./ormconfig.ts migration:revert",
-    "seed:user": "NODE_ENV=local npx ts-node -r tsconfig-paths/register src/database/seeds/seed-user.ts"
+    "seed:user": "NODE_ENV=local npx ts-node -r tsconfig-paths/register src/database/seeds/seed-user.ts",
+    "db:reset": "NODE_ENV=local npx ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js schema:drop -d ./ormconfig.ts && npm run migration:run && npm run seed:user"
   },
   "dependencies": {
     "@nestjs/axios": "^4.0.1",

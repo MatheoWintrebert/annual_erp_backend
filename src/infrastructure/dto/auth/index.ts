@@ -6,3 +6,4 @@ export * from "./2fa-responses.dto";
 export * from "./enable-2fa.response.dto";
 export * from "./verify-2FA.response.dto";
 export * from "./verify-2FA.request.dto";
+export * from "./full-login.request.dto";

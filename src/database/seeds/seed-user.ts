@@ -2,6 +2,7 @@ import 'module-alias/register';
 import dataSource from '../../../ormconfig';
 import { UserTypeormEntity } from '@infrastructure/entities/user.typeorm.entity';
 import { hashPassword } from '@libs/helpers';
+import { Secret } from '@otp-lib/authenticator';
 
 async function seedUser() {
   await dataSource.initialize();
@@ -19,6 +20,8 @@ async function seedUser() {
   }
 
   const hashedPassword = await hashPassword('miyazono');
+  const newSecret = Secret.create();
+
 
   const user = userRepository.create({
     lastName: 'Miyazono',
@@ -26,7 +29,8 @@ async function seedUser() {
     email: 'admin@kaori.com',
     password: hashedPassword,
     isActive: true,
-    isTwoFactorEnabled: false,
+    isTwoFactorEnabled: true,
+    twoFactorSecret: newSecret.toBase32()
   });
 
   await userRepository.save(user);
@@ -34,6 +38,7 @@ async function seedUser() {
   console.log('Default user created successfully:');
   console.log('  Email: admin@kaori.com');
   console.log('  Password: miyazono');
+  console.log('  Secret: ', newSecret.toBase32());
 
   await dataSource.destroy();
 }
