@@ -1,5 +1,4 @@
-import { MiddlewareConsumer, Module, type Provider } from "@nestjs/common";
-import { APP_GUARD } from "@nestjs/core";
+import { MiddlewareConsumer, Module } from "@nestjs/common";
 import { ConfigModule, ConfigService } from "@nestjs/config";
 import { ScheduleModule } from "@nestjs/schedule";
 import { TypeOrmModule, TypeOrmModuleOptions } from "@nestjs/typeorm";
@@ -92,8 +91,6 @@ const entities = [
   PickingListTypeormEntity,
   PickingListItemTypeormEntity,
 ];
-import { UserMysqlRepository } from "@infrastructure/repositories";
-import { RegisterUseCase } from "@application/use-cases/auth/register/register.use-case";
 import AuthConfiguration from "./auth.configuration";
 import UserConfiguration from "./user.configuration";
 

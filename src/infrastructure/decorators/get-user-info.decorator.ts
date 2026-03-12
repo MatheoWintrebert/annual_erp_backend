@@ -1,4 +1,4 @@
-import { IAuthRequest, IUserInfo } from "@domain/types";
+import { IAuthRequest } from "@domain/types";
 import { createParamDecorator } from "@nestjs/common";
 
 export const GetUserInfo = createParamDecorator((_, ctx) => {

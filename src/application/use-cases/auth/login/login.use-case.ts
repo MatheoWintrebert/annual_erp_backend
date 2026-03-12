@@ -1,8 +1,6 @@
-import { Inject } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
 import * as bcrypt from "bcrypt";
 import { UserRepository } from "@domain/repositories";
-import { UserEntity } from "@domain/entities";
 import { ILoginInput, ILoginOutput } from ".";
 
 export class LoginUseCase {

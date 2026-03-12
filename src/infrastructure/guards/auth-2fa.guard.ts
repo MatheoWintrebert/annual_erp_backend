@@ -20,11 +20,9 @@ export class Auth2FaGuard implements CanActivate {
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
-    const protectionContext: IProtectionContext =
-      this.reflector.get<IProtectionContext>(
-        "protectionContext",
-        context.getHandler()
-      );
+    const protectionContext = this.reflector.get<
+      IProtectionContext | undefined
+    >("protectionContext", context.getHandler());
     const allowPublicRequests = protectionContext?.isPublic;
 
     if (allowPublicRequests) {
@@ -32,14 +30,16 @@ export class Auth2FaGuard implements CanActivate {
     }
 
     const request: IAuthRequest = context.switchToHttp().getRequest();
-    const authorization = request.headers.authorization || "";
+    const authorization = request.headers.authorization ?? "";
     const jwtToken = authorization.split(" ")[1];
 
     if (!jwtToken) {
       throw new UnauthorizedException("No bearer token");
     }
 
-    const jwtDecode = this.tokenService.verify(jwtToken, { secret: "to2fa" });
+    const jwtDecode = this.tokenService.verify(jwtToken, {
+      secret: "to2fa",
+    }) as { id: number; email: string } | null;
     if (!jwtDecode) {
       throw new UnauthorizedException("Invalid token");
     }

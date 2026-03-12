@@ -1,8 +1,6 @@
-import { Inject } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
 import * as bcrypt from "bcrypt";
 import { UserRepository } from "@domain/repositories";
-import { UserEntity } from "@domain/entities";
 import { Secret, TOTP } from "@otp-lib/authenticator";
 import { IFullLoginInput, IFullLoginOutput } from ".";
 
@@ -30,7 +28,7 @@ export class FullLoginUseCase {
       issuer: "Pallitix",
       secret,
     });
-    const isValid = totp.verify(input.code);
+    const isValid = await totp.verify(input.code);
     if (!isValid) {
       throw new Error("Invalid 2FA code");
     }

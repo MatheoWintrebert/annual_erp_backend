@@ -10,6 +10,6 @@ export class UserController {
 
   @Post("")
   async createUser(@Body() registerDto: PostUserResquestDto): Promise<void> {
-    const result = await this.postUserUseCase.execute(registerDto);
+    await this.postUserUseCase.execute(registerDto);
   }
 }

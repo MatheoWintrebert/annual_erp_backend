@@ -1,15 +1,11 @@
 import 'module-alias/register';
 import { DataSource } from 'typeorm';
-import { ConfigModule, ConfigService } from '@nestjs/config';
+import { ConfigService } from '@nestjs/config';
 import { config } from 'dotenv';
 import { SnakeCaseNamingStrategy } from '@libs/helpers';
 import { Environment } from '@domain/types';
 
-config();
-
-void ConfigModule.forRoot({
-  envFilePath: `.env.ormconfig`,
-});
+config({ path: '.env.ormconfig' });
 
 const configService = new ConfigService();
 const isProduction = configService.get('NODE_ENV') === Environment.Production;

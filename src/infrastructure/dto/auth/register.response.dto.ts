@@ -1,4 +1,3 @@
-import { IRegisterOutput } from "@application/use-cases";
 import { UserResponseDto } from "../user";
 import { ApiProperty } from "@nestjs/swagger";
 import { IsString, ValidateNested } from "class-validator";

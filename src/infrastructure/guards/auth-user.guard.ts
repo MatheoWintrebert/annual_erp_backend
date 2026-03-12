@@ -20,11 +20,9 @@ export class AuthUserGuard implements CanActivate {
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
-    const protectionContext: IProtectionContext =
-      this.reflector.get<IProtectionContext>(
-        "protectionContext",
-        context.getHandler()
-      );
+    const protectionContext = this.reflector.get<
+      IProtectionContext | undefined
+    >("protectionContext", context.getHandler());
     const allowPublicRequests = protectionContext?.isPublic;
 
     if (allowPublicRequests) {
@@ -32,7 +30,7 @@ export class AuthUserGuard implements CanActivate {
     }
 
     const request: IAuthRequest = context.switchToHttp().getRequest();
-    const authorization = request.headers.authorization || "";
+    const authorization = request.headers.authorization ?? "";
     const jwtToken = authorization.split(" ")[1];
 
     if (!jwtToken) {
@@ -41,7 +39,7 @@ export class AuthUserGuard implements CanActivate {
 
     const jwtDecode = this.tokenService.verify(jwtToken, {
       secret: "application",
-    });
+    }) as { id: number; email: string } | null;
     if (!jwtDecode) {
       throw new UnauthorizedException("Invalid token");
     }

@@ -35,8 +35,16 @@ export class UserMysqlRepository implements UserRepository {
 
   async create(user: UserEntity): Promise<UserEntity> {
     const hashedPassword = await bcrypt.hash(user.password, 10);
-    const userWithHashedPassword = { ...user, password: hashedPassword };
-    const newUser = this.userRepository.create(userWithHashedPassword);
+    const newUser = this.userRepository.create({
+      firstName: user.firstName,
+      lastName: user.lastName,
+      email: user.email,
+      password: hashedPassword,
+      isActive: user.isActive,
+      twoFactorSecret: user.twoFactorSecret,
+      isTwoFactorEnabled: user.isTwoFactorEnabled,
+      backupCodes: user.backupCodes,
+    });
     const savedUser = await this.userRepository.save(newUser);
     return new UserEntity(savedUser);
   }

@@ -1,4 +1,3 @@
-import { Inject } from "@nestjs/common";
 import { UserRepository } from "@domain/repositories";
 import { IVerifyTwoFactorInput, IVerifyTwoFactorOutput } from ".";
 import { Secret, TOTP } from "@otp-lib/authenticator";
@@ -6,7 +5,6 @@ import { JwtService } from "@nestjs/jwt";
 
 export class VerifyTwoFactorUseCase {
   constructor(
-    @Inject(UserRepository)
     private readonly userRepository: UserRepository,
     private readonly jwtService: JwtService
   ) {}
@@ -18,7 +16,7 @@ export class VerifyTwoFactorUseCase {
       issuer: "Pallitix",
       secret,
     });
-    const isValid = totp.verify(input.code);
+    const isValid = await totp.verify(input.code);
     if (!isValid) {
       throw new Error("Invalid 2FA code");
     }

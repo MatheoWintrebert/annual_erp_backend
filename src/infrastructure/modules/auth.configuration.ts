@@ -6,7 +6,6 @@ import {
 import { FullLoginUseCase } from "@application/use-cases/auth/full-login";
 import { UserRepository } from "@domain/repositories";
 import { AuthController } from "@infrastructure/controllers";
-import { UserMysqlRepository } from "@infrastructure/repositories";
 import { ModuleMetadata } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
 
@@ -14,25 +13,34 @@ export default {
   providers: [
     {
       provide: LoginUseCase,
-      useFactory: (userRepository: UserRepository, jwtService: JwtService) =>
-        new LoginUseCase(userRepository, jwtService),
+      useFactory: (
+        userRepository: UserRepository,
+        jwtService: JwtService
+      ): LoginUseCase => new LoginUseCase(userRepository, jwtService),
       inject: [UserRepository, JwtService],
     },
     {
       provide: FullLoginUseCase,
-      useFactory: (userRepository: UserRepository, jwtService: JwtService) =>
-        new FullLoginUseCase(userRepository, jwtService),
+      useFactory: (
+        userRepository: UserRepository,
+        jwtService: JwtService
+      ): FullLoginUseCase => new FullLoginUseCase(userRepository, jwtService),
       inject: [UserRepository, JwtService],
     },
     {
       provide: RegisterUseCase,
-      useFactory: (userRepository: UserRepository, jwtService: JwtService) =>
-        new RegisterUseCase(userRepository, jwtService),
+      useFactory: (
+        userRepository: UserRepository,
+        jwtService: JwtService
+      ): RegisterUseCase => new RegisterUseCase(userRepository, jwtService),
       inject: [UserRepository, JwtService],
     },
     {
       provide: VerifyTwoFactorUseCase,
-      useFactory: (userRepository: UserRepository, jwtService: JwtService) =>
+      useFactory: (
+        userRepository: UserRepository,
+        jwtService: JwtService
+      ): VerifyTwoFactorUseCase =>
         new VerifyTwoFactorUseCase(userRepository, jwtService),
       inject: [UserRepository, JwtService],
     },

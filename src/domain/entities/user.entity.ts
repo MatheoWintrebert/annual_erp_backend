@@ -14,20 +14,28 @@ export class UserEntity {
   public updatedAt!: Date;
 
   constructor(params: Partial<IUser>) {
-    this.id = params.id!;
-    this.lastName = params.lastName!;
-    this.firstName = params.firstName!;
-    this.email = params.email!;
-    this.password = params.password!;
+    this.id = params.id ?? 0;
+    this.lastName = params.lastName ?? "";
+    this.firstName = params.firstName ?? "";
+    this.email = params.email ?? "";
+    this.password = params.password ?? "";
     this.isActive = params.isActive ?? true;
-    this.twoFactorSecret = params.twoFactorSecret || null;
+    this.twoFactorSecret = params.twoFactorSecret ?? null;
     this.isTwoFactorEnabled = params.isTwoFactorEnabled ?? false;
-    this.backupCodes = params.backupCodes || null;
-    this.createdAt = params.createdAt!;
-    this.updatedAt = params.updatedAt!;
+    this.backupCodes = params.backupCodes ?? null;
+    this.createdAt = params.createdAt ?? new Date(0);
+    this.updatedAt = params.updatedAt ?? new Date(0);
   }
 
-  public toResponse() {
+  public toResponse(): {
+    id: number;
+    lastName: string;
+    firstName: string;
+    email: string;
+    isActive: boolean;
+    createdAt: Date;
+    updatedAt: Date;
+  } {
     return {
       id: this.id,
       lastName: this.lastName,

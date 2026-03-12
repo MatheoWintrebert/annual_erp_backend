@@ -12,13 +12,13 @@ export default {
     },
     {
       provide: PostUserUseCase,
-      useFactory: (userRepository: UserRepository) =>
+      useFactory: (userRepository: UserRepository): PostUserUseCase =>
         new PostUserUseCase(userRepository),
       inject: [UserRepository],
     },
     {
       provide: GetUserUseCase,
-      useFactory: (userRepository: UserRepository) =>
+      useFactory: (userRepository: UserRepository): GetUserUseCase =>
         new GetUserUseCase(userRepository),
       inject: [UserRepository],
     },

@@ -64,7 +64,7 @@ export class AuthController {
       userId: user.id,
       email: user.email,
       code: body.code,
-      secret: user.twoFactorSecret || "",
+      secret: user.twoFactorSecret ?? "",
     });
     return result;
   }

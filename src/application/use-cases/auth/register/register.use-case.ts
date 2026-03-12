@@ -1,11 +1,9 @@
-import { Inject } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
 import { UserRepository } from "@domain/repositories";
 import { UserEntity } from "@domain/entities";
 import { IRegisterInput } from "./register.input";
 import { IRegisterOutput } from "./register.output";
 import { HOTP, Secret } from "@otp-lib/core";
-import { hash } from "crypto";
 import { hashPassword } from "@libs/helpers";
 import { TOTP } from "@otp-lib/authenticator";
 
@@ -20,7 +18,7 @@ export class RegisterUseCase {
     if (!existingUser) {
       throw new Error("User not found");
     }
-    const secret = Secret.fromUtf8(existingUser.twoFactorSecret!);
+    const secret = Secret.fromUtf8(existingUser.twoFactorSecret ?? "");
 
     const codeOTP = new HOTP({ secret: secret });
 

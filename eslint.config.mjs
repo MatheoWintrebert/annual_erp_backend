@@ -23,6 +23,20 @@ export default defineConfig([
     rules: {
       "@typescript-eslint/no-explicit-any": "error",
       "@typescript-eslint/explicit-function-return-type": "warn",
+      "@typescript-eslint/no-extraneous-class": [
+        "error",
+        { allowWithDecorator: true },
+      ],
+      "@typescript-eslint/no-unused-vars": [
+        "error",
+        { argsIgnorePattern: "^_" },
+      ],
+    },
+  },
+  {
+    files: ["**/*.spec.ts", "**/*.test.ts"],
+    rules: {
+      "@typescript-eslint/unbound-method": "off",
     },
   },
 ]);
