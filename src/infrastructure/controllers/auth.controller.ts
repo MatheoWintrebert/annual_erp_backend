@@ -42,6 +42,7 @@ export class AuthController {
     const result = await this.fullLoginUseCase.execute(loginDto);
     return {
       token: result.token,
+      user: result.user,
     };
   }
 

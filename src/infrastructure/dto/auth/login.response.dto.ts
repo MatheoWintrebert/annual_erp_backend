@@ -1,3 +1,4 @@
+import { IUser } from "@domain/types";
 import { ApiProperty } from "@nestjs/swagger";
 import { IsString } from "class-validator";
 
@@ -8,4 +9,6 @@ export class LoginResponseDto {
   })
   @IsString()
   token: string;
+
+  user?: IUser;
 }
