@@ -52,11 +52,8 @@ export class AlertEvaluationService {
       }
 
       let nearestExpiryDate: Date | null = null;
-      let totalQuantity = 0;
 
       for (const stock of productStock) {
-        totalQuantity += stock.quantity;
-
         if (stock.expiryDate !== null) {
           if (
             nearestExpiryDate === null ||
@@ -78,6 +75,19 @@ export class AlertEvaluationService {
 
       if (daysRemaining > product.expiryAlertThreshold) {
         continue;
+      }
+
+      let totalQuantity = 0;
+      for (const stock of productStock) {
+        if (stock.expiryDate !== null) {
+          const stockDaysRemaining = this.calculateDaysRemaining(
+            stock.expiryDate,
+            currentDate
+          );
+          if (stockDaysRemaining <= product.expiryAlertThreshold) {
+            totalQuantity += stock.quantity;
+          }
+        }
       }
 
       const severity = this.calculateSeverity(
