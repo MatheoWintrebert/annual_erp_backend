@@ -24,7 +24,7 @@ export class AuthController {
     private readonly loginUseCase: LoginUseCase,
     private readonly registerUseCase: RegisterUseCase,
     private readonly verifyTwoFactorUseCase: VerifyTwoFactorUseCase,
-    private readonly fullLoginUseCase: FullLoginUseCase,
+    private readonly fullLoginUseCase: FullLoginUseCase
   ) {}
 
   @Post("login")

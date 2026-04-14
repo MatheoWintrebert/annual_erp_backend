@@ -5,44 +5,44 @@ import { hashPassword } from "@libs/helpers";
 import { Secret } from "@otp-lib/authenticator";
 
 async function seedUser(): Promise<void> {
-	await dataSource.initialize();
+  await dataSource.initialize();
 
-	const userRepository = dataSource.getRepository(UserTypeormEntity);
+  const userRepository = dataSource.getRepository(UserTypeormEntity);
 
-	const existingUser = await userRepository.findOne({
-		where: { email: "admin@kaori.com" },
-	});
+  const existingUser = await userRepository.findOne({
+    where: { email: "admin@kaori.com" },
+  });
 
-	if (existingUser) {
-		console.log("User admin@kaori.com already exists, skipping seed.");
-		await dataSource.destroy();
-		return;
-	}
+  if (existingUser) {
+    console.log("User admin@kaori.com already exists, skipping seed.");
+    await dataSource.destroy();
+    return;
+  }
 
-	const hashedPassword = await hashPassword("miyazono");
-	const newSecret = Secret.create();
+  const hashedPassword = await hashPassword("miyazono");
+  const newSecret = Secret.create();
 
-	const user = userRepository.create({
-		lastName: "Miyazono",
-		firstName: "kaori",
-		email: "admin@kaori.com",
-		password: hashedPassword,
-		isActive: true,
-		isTwoFactorEnabled: true,
-		twoFactorSecret: newSecret.toBase32(),
-	});
+  const user = userRepository.create({
+    lastName: "Miyazono",
+    firstName: "kaori",
+    email: "admin@kaori.com",
+    password: hashedPassword,
+    isActive: true,
+    isTwoFactorEnabled: true,
+    twoFactorSecret: newSecret.toBase32(),
+  });
 
-	await userRepository.save(user);
+  await userRepository.save(user);
 
-	console.log("Default user created successfully:");
-	console.log("  Email: admin@kaori.com");
-	console.log("  Password: miyazono");
-	console.log("  Secret: ", newSecret.toBase32());
+  console.log("Default user created successfully:");
+  console.log("  Email: admin@kaori.com");
+  console.log("  Password: miyazono");
+  console.log("  Secret: ", newSecret.toBase32());
 
-	await dataSource.destroy();
+  await dataSource.destroy();
 }
 
 seedUser().catch((error: unknown) => {
-	console.error("Seed failed:", error);
-	process.exit(1);
+  console.error("Seed failed:", error);
+  process.exit(1);
 });
