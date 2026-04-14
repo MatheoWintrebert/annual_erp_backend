@@ -1,4 +1,6 @@
+import { APP_GUARD } from "@nestjs/core";
 import { MiddlewareConsumer, Module } from "@nestjs/common";
+import { AuthUserGuard } from "@infrastructure/guards";
 import { ConfigModule, ConfigService } from "@nestjs/config";
 import { ScheduleModule } from "@nestjs/schedule";
 import { TypeOrmModule, TypeOrmModuleOptions } from "@nestjs/typeorm";
@@ -130,6 +132,7 @@ import UserConfiguration from "./user.configuration";
     ...(UserConfiguration.controllers ?? []),
   ],
   providers: [
+    { provide: APP_GUARD, useClass: AuthUserGuard },
     ...(AuthConfiguration.providers ?? []),
     ...(UserConfiguration.providers ?? []),
     {
