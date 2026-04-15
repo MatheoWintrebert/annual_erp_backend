@@ -22,7 +22,7 @@ export class FullLoginUseCase {
     if (!isPasswordValid) {
       throw new Error("Invalid password");
     }
-    const secret = Secret.fromBase32(user.twoFactorSecret || "");
+    const secret = Secret.fromBase32(user.twoFactorSecret ?? "");
     const totp = new TOTP({
       account: input.email,
       issuer: "Pallitix",

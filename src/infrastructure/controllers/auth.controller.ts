@@ -14,7 +14,7 @@ import {
   VerifyTwoFactorUseCase,
 } from "@application/use-cases";
 import { Auth2FaGuard } from "@infrastructure/guards/auth-2fa.guard";
-import { GetUserInfo } from "@infrastructure/decorators";
+import { GetUserInfo, Public } from "@infrastructure/decorators";
 import { IUserInfo } from "@domain/types";
 import { FullLoginUseCase } from "@application/use-cases/auth/full-login";
 
@@ -24,9 +24,10 @@ export class AuthController {
     private readonly loginUseCase: LoginUseCase,
     private readonly registerUseCase: RegisterUseCase,
     private readonly verifyTwoFactorUseCase: VerifyTwoFactorUseCase,
-    private readonly fullLoginUseCase: FullLoginUseCase,
+    private readonly fullLoginUseCase: FullLoginUseCase
   ) {}
 
+  @Public()
   @Post("login")
   async login(@Body() loginDto: LoginRequestDto): Promise<LoginResponseDto> {
     const result = await this.loginUseCase.execute(loginDto);
@@ -35,6 +36,7 @@ export class AuthController {
     };
   }
 
+  @Public()
   @Post("full-login")
   async fullLogin(
     @Body() loginDto: FullLoginRequestDto
@@ -46,6 +48,7 @@ export class AuthController {
     };
   }
 
+  @Public()
   @Post("register")
   async register(
     @Body() registerDto: RegisterRequestDto
