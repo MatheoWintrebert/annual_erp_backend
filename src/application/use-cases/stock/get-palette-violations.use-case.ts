@@ -28,6 +28,19 @@ export class GetPaletteViolationsUseCase implements QueryUseCase<
       )
     );
 
+    const rejections = settledResults.filter(
+      (r): r is PromiseRejectedResult => r.status === "rejected"
+    );
+
+    if (rejections.length > 0) {
+      rejections.forEach((r) =>
+        console.error("Rule violation check failed:", r.reason)
+      );
+      if (rejections.length === settledResults.length) {
+        throw rejections[0].reason as Error;
+      }
+    }
+
     return settledResults
       .filter(
         (result): result is PromiseFulfilledResult<RuleViolation[]> =>
