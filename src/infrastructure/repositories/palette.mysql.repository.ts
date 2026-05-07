@@ -615,7 +615,10 @@ export class PaletteMysqlRepository implements PaletteRepository {
   }
 
   async delete(id: number): Promise<void> {
-    const result = await this.paletteRepo.softDelete({ id, deletedAt: IsNull() });
+    const result = await this.paletteRepo.softDelete({
+      id,
+      deletedAt: IsNull(),
+    });
     if (result.affected === 0) {
       throw new PaletteNotFoundError(id);
     }

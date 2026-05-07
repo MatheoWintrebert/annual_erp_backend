@@ -210,9 +210,7 @@ export class StockController {
     ]),
     type: HttpErrorDto,
   })
-  async deletePalette(
-    @Param("id", ParseIntPipe) id: number
-  ): Promise<void> {
+  async deletePalette(@Param("id", ParseIntPipe) id: number): Promise<void> {
     await this.deletePaletteUseCase.execute({ paletteId: id });
   }
 }

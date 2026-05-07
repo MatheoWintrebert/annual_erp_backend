@@ -55,7 +55,9 @@ export async function createApp(): Promise<INestApplication> {
 
   app.enableCors({
     credentials: true,
-    origin: process.env.APP_HOST ?? (process.env.NODE_ENV === "production" ? false : true),
+    origin:
+      process.env.APP_HOST ??
+      (process.env.NODE_ENV === "production" ? false : true),
   });
 
   const configService = app.get(ConfigService);
