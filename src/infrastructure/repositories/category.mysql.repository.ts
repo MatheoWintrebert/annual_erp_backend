@@ -105,13 +105,18 @@ export class CategoryMysqlRepository implements CategoryRepository {
     await this.categoryRepo.softDelete(id);
   }
 
+  private escapeLikeString(value: string): string {
+    return value.replace(/[%_\\]/g, "\\$&");
+  }
+
   private async findWithSearch(
     search: string,
     skip: number,
     limit: number
   ): Promise<FindCategoriesResult> {
+    const escaped = this.escapeLikeString(search);
     const [categories, total] = await this.categoryRepo.findAndCount({
-      where: { name: Like(`%${search}%`), deletedAt: IsNull() },
+      where: { name: Like(`%${escaped}%`), deletedAt: IsNull() },
       order: { createdAt: "DESC" },
       skip,
       take: limit,

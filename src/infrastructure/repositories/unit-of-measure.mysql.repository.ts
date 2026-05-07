@@ -128,15 +128,20 @@ export class UnitOfMeasureMysqlRepository implements UnitOfMeasureRepository {
     await this.unitOfMeasureRepo.remove(unitOfMeasure);
   }
 
+  private escapeLikeString(value: string): string {
+    return value.replace(/[%_\\]/g, "\\$&");
+  }
+
   private async findWithSearch(
     search: string,
     skip: number,
     limit: number
   ): Promise<FindUnitsOfMeasureResult> {
+    const escaped = this.escapeLikeString(search);
     const [unitsOfMeasure, total] = await this.unitOfMeasureRepo.findAndCount({
       where: [
-        { name: Like(`%${search}%`) },
-        { abbreviation: Like(`%${search}%`) },
+        { name: Like(`%${escaped}%`) },
+        { abbreviation: Like(`%${escaped}%`) },
       ],
       order: { createdAt: "DESC" },
       skip,

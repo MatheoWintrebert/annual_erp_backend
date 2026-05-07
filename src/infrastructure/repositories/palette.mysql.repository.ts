@@ -500,7 +500,8 @@ export class PaletteMysqlRepository implements PaletteRepository {
     const result = await repo
       .createQueryBuilder()
       .update(PaletteLotTypeormEntity)
-      .set({ quantity: () => `quantity - ${String(quantity)}` })
+      .set({ quantity: () => "quantity - :qty" })
+      .setParameters({ qty: quantity })
       .where("id = :id AND quantity >= :quantity", {
         id: paletteLotId,
         quantity,
@@ -510,6 +511,18 @@ export class PaletteMysqlRepository implements PaletteRepository {
     if (result.affected === 0) {
       throw new StockDeductionFailedError(paletteLotId, quantity);
     }
+  }
+
+  async deductMultiplePaletteLotQuantities(
+    deductions: Array<{ paletteLotId: number; quantity: number }>
+  ): Promise<void> {
+    if (deductions.length === 0) return;
+
+    await this.paletteRepo.manager.transaction(async (manager) => {
+      for (const { paletteLotId, quantity } of deductions) {
+        await this.deductPaletteLotQuantity(paletteLotId, quantity, manager);
+      }
+    });
   }
 
   async getStockWithExpiryByProductIds(productIds: number[]): Promise<

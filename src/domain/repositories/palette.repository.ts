@@ -71,6 +71,10 @@ export abstract class PaletteRepository {
     transactionManager?: EntityManager
   ): Promise<void>;
 
+  abstract deductMultiplePaletteLotQuantities(
+    deductions: Array<{ paletteLotId: number; quantity: number }>
+  ): Promise<void>;
+
   abstract getStockWithExpiryByProductIds(productIds: number[]): Promise<
     {
       productId: number;

@@ -38,7 +38,7 @@ export class AuthUserGuard implements CanActivate {
     }
 
     const jwtDecode = this.tokenService.verify(jwtToken, {
-      secret: "application",
+      secret: process.env.JWT_SECRET ?? "application",
     }) as { id: number; email: string } | null;
     if (!jwtDecode) {
       throw new UnauthorizedException("Invalid token");
@@ -47,6 +47,10 @@ export class AuthUserGuard implements CanActivate {
     const user: IUserInfo | null = await this.getUserUseCase.execute({
       userId: jwtDecode.id,
     });
+
+    if (!user) {
+      throw new UnauthorizedException("User not found");
+    }
 
     request.userInfo = user;
 

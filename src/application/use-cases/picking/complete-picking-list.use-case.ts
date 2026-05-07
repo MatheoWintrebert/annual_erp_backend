@@ -70,18 +70,21 @@ export class CompletePickingListUseCase implements MutationUseCase<
       paletteLots.map((lot) => [lot.paletteLotId, lot])
     );
 
-    // Deduct stock for picked items
-    const deductions: StockDeduction[] = [];
-    for (const item of pickedItems) {
-      if (item.pickedQuantity > 0) {
-        await this.paletteRepository.deductPaletteLotQuantity(
-          item.paletteLotId,
-          item.pickedQuantity
-        );
-      }
+    // Deduct stock for picked items — atomic batch to avoid partial failures
+    const stockDeductions = pickedItems
+      .filter((item) => item.pickedQuantity > 0)
+      .map((item) => ({
+        paletteLotId: item.paletteLotId,
+        quantity: item.pickedQuantity,
+      }));
 
+    await this.paletteRepository.deductMultiplePaletteLotQuantities(
+      stockDeductions
+    );
+
+    const deductions: StockDeduction[] = pickedItems.map((item) => {
       const lotData = paletteLotMap.get(item.paletteLotId);
-      deductions.push({
+      return {
         paletteLotId: item.paletteLotId,
         productName: lotData?.productName ?? "Unknown",
         quantityDeducted: item.pickedQuantity,
@@ -89,8 +92,8 @@ export class CompletePickingListUseCase implements MutationUseCase<
         positionX: lotData?.positionX ?? 0,
         positionY: lotData?.positionY ?? 0,
         positionZ: lotData?.positionZ ?? 0,
-      });
-    }
+      };
+    });
 
     // Build discrepancies for skipped items
     const discrepancies: PickingDiscrepancy[] = skippedItems.map((item) => {
