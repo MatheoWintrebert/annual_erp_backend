@@ -13,7 +13,7 @@ export class FullLoginUseCase {
 
   async execute(input: IFullLoginInput): Promise<IFullLoginOutput> {
     const user = await this.userRepository.findByEmail(input.email);
-    if (!user || !user.isActive) {
+    if (!user?.isActive) {
       throw new UnauthorizedException("Invalid credentials");
     }
     const isPasswordValid = await bcrypt.compare(input.password, user.password);

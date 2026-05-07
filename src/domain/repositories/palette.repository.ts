@@ -72,7 +72,7 @@ export abstract class PaletteRepository {
   ): Promise<void>;
 
   abstract deductMultiplePaletteLotQuantities(
-    deductions: Array<{ paletteLotId: number; quantity: number }>
+    deductions: { paletteLotId: number; quantity: number }[]
   ): Promise<void>;
 
   abstract getStockWithExpiryByProductIds(productIds: number[]): Promise<

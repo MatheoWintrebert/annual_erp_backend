@@ -514,7 +514,7 @@ export class PaletteMysqlRepository implements PaletteRepository {
   }
 
   async deductMultiplePaletteLotQuantities(
-    deductions: Array<{ paletteLotId: number; quantity: number }>
+    deductions: { paletteLotId: number; quantity: number }[]
   ): Promise<void> {
     if (deductions.length === 0) return;
 

@@ -33,9 +33,9 @@ export class GetPaletteViolationsUseCase implements QueryUseCase<
     );
 
     if (rejections.length > 0) {
-      rejections.forEach((r) =>
-        console.error("Rule violation check failed:", r.reason)
-      );
+      rejections.forEach((r) => {
+        console.error("Rule violation check failed:", r.reason);
+      });
       if (rejections.length === settledResults.length) {
         throw rejections[0].reason as Error;
       }
