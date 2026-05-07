@@ -4,6 +4,7 @@ import { PaletteRepository, PalettierRepository } from "@domain/repositories";
 import { PlacementEngineService } from "@domain/services";
 import {
   CheckOnboardingViolationsUseCase,
+  DeletePaletteUseCase,
   GetPalettesUseCase,
   GetPaletteViolationsUseCase,
   UpdatePalettePositionUseCase,
@@ -39,6 +40,7 @@ import { RuleModule } from "./rule.module";
     GetPaletteViolationsUseCase,
     UpdatePalettePositionUseCase,
     CheckOnboardingViolationsUseCase,
+    DeletePaletteUseCase,
   ],
   exports: [PaletteRepository, PalettierRepository],
 })

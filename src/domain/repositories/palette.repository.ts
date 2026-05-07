@@ -90,4 +90,6 @@ export abstract class PaletteRepository {
     startDate: Date,
     endDate: Date
   ): Promise<number>;
+
+  abstract delete(id: number): Promise<void>;
 }
