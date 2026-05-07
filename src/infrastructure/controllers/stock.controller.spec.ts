@@ -6,6 +6,7 @@ import {
   CheckOnboardingViolationsUseCase,
   UpdatePalettePositionUseCase,
 } from "@application/use-cases/stock";
+import { DeletePaletteUseCase } from "@application/use-cases/stock/delete-palette.use-case";
 import type { RuleViolation } from "@domain/types";
 
 describe("StockController", () => {
@@ -39,6 +40,10 @@ describe("StockController", () => {
         {
           provide: UpdatePalettePositionUseCase,
           useValue: { execute: updatePositionExecuteMock },
+        },
+        {
+          provide: DeletePaletteUseCase,
+          useValue: { execute: jest.fn() },
         },
       ],
     }).compile();

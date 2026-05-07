@@ -78,9 +78,11 @@ export class CompletePickingListUseCase implements MutationUseCase<
         quantity: item.pickedQuantity,
       }));
 
-    await this.paletteRepository.deductMultiplePaletteLotQuantities(
-      stockDeductions
-    );
+    if (stockDeductions.length > 0) {
+      await this.paletteRepository.deductMultiplePaletteLotQuantities(
+        stockDeductions
+      );
+    }
 
     const deductions: StockDeduction[] = pickedItems.map((item) => {
       const lotData = paletteLotMap.get(item.paletteLotId);

@@ -15,7 +15,7 @@ export class DeletePalettierUseCase implements CommandUseCase<DeletePalettierInp
     const palettier = await this.palettierRepository.findById(input.id);
 
     if (!palettier) {
-      throw new NotFoundError(`Palettier with ID ${String(input.id)}`);
+      throw new NotFoundError(`Palettier with ID ${String(input.id)} not found`);
     }
 
     const paletteCount =
