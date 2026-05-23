@@ -16,7 +16,9 @@ import { PalettierTypeormEntity } from "./palettier.typeorm.entity";
 import { PaletteLotTypeormEntity } from "./palette-lot.typeorm.entity";
 
 @Entity("palette")
-@Index(["palettierId", "positionX", "positionY", "positionZ", "positionLock"], { unique: true })
+@Index(["palettierId", "positionX", "positionY", "positionZ", "positionLock"], {
+  unique: true,
+})
 export class PaletteTypeormEntity extends BaseEntity implements IPalette {
   @PrimaryGeneratedColumn()
   id!: number;
