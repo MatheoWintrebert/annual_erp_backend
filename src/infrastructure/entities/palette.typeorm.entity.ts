@@ -16,7 +16,7 @@ import { PalettierTypeormEntity } from "./palettier.typeorm.entity";
 import { PaletteLotTypeormEntity } from "./palette-lot.typeorm.entity";
 
 @Entity("palette")
-@Index(["palettierId", "positionX", "positionY", "positionZ"], { unique: true })
+@Index(["palettierId", "positionX", "positionY", "positionZ", "positionLock"], { unique: true })
 export class PaletteTypeormEntity extends BaseEntity implements IPalette {
   @PrimaryGeneratedColumn()
   id!: number;
@@ -41,6 +41,15 @@ export class PaletteTypeormEntity extends BaseEntity implements IPalette {
 
   @DeleteDateColumn({ name: "deleted_at" })
   deletedAt!: Date | null;
+
+  @Column({
+    name: "position_lock",
+    type: "bigint",
+    generatedType: "VIRTUAL",
+    asExpression: "IF(`deleted_at` IS NULL, 0, TO_SECONDS(`deleted_at`))",
+    select: false,
+  })
+  positionLock!: number;
 
   @ManyToOne(() => PalettierTypeormEntity, (palettier) => palettier.palettes)
   @JoinColumn({ name: "palettier_id" })

@@ -61,8 +61,23 @@ export class PaletteMysqlRepository implements PaletteRepository {
       positionY: data.positionY,
       positionZ: data.positionZ,
     });
-    const saved = await repo.save(entity);
-    return this.toPaletteEntity(saved);
+    try {
+      const saved = await repo.save(entity);
+      return this.toPaletteEntity(saved);
+    } catch (error: unknown) {
+      if (
+        error instanceof QueryFailedError &&
+        (error.driverError as { errno?: number }).errno === 1062
+      ) {
+        throw new PositionOccupiedError(
+          data.palettierId,
+          data.positionX,
+          data.positionY,
+          data.positionZ
+        );
+      }
+      throw error;
+    }
   }
 
   async findByPalettierIdAndPosition(
