@@ -22,7 +22,9 @@ export class VerifyTwoFactorUseCase {
     }
 
     const payload = { email: input.email, sub: input.userId };
-    const token = this.jwtService.sign(payload, { secret: "application" });
+    const token = this.jwtService.sign(payload, {
+      secret: process.env.JWT_SECRET ?? "application",
+    });
 
     return { token };
   }

@@ -1,4 +1,5 @@
 import { JwtService } from "@nestjs/jwt";
+import { UnauthorizedException } from "@nestjs/common";
 import * as bcrypt from "bcrypt";
 import { UserRepository } from "@domain/repositories";
 import { Secret, TOTP } from "@otp-lib/authenticator";
@@ -12,15 +13,12 @@ export class FullLoginUseCase {
 
   async execute(input: IFullLoginInput): Promise<IFullLoginOutput> {
     const user = await this.userRepository.findByEmail(input.email);
-    if (!user) {
-      throw new Error("User not found");
-    }
-    if (!user.isActive) {
-      throw new Error("User is not active");
+    if (!user?.isActive) {
+      throw new UnauthorizedException("Invalid credentials");
     }
     const isPasswordValid = await bcrypt.compare(input.password, user.password);
     if (!isPasswordValid) {
-      throw new Error("Invalid password");
+      throw new UnauthorizedException("Invalid credentials");
     }
     const secret = Secret.fromBase32(user.twoFactorSecret ?? "");
     const totp = new TOTP({
@@ -30,11 +28,13 @@ export class FullLoginUseCase {
     });
     const isValid = await totp.verify(input.code);
     if (!isValid) {
-      throw new Error("Invalid 2FA code");
+      throw new UnauthorizedException("Invalid 2FA code");
     }
 
     const payload = { email: user.email, sub: user.id };
-    const token = this.jwtService.sign(payload, { secret: "application" });
+    const token = this.jwtService.sign(payload, {
+      secret: process.env.JWT_SECRET ?? "application",
+    });
     return { user, token };
   }
 }

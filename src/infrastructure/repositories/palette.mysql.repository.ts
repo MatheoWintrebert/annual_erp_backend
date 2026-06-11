@@ -61,8 +61,23 @@ export class PaletteMysqlRepository implements PaletteRepository {
       positionY: data.positionY,
       positionZ: data.positionZ,
     });
-    const saved = await repo.save(entity);
-    return this.toPaletteEntity(saved);
+    try {
+      const saved = await repo.save(entity);
+      return this.toPaletteEntity(saved);
+    } catch (error: unknown) {
+      if (
+        error instanceof QueryFailedError &&
+        (error.driverError as { errno?: number }).errno === 1062
+      ) {
+        throw new PositionOccupiedError(
+          data.palettierId,
+          data.positionX,
+          data.positionY,
+          data.positionZ
+        );
+      }
+      throw error;
+    }
   }
 
   async findByPalettierIdAndPosition(
@@ -500,7 +515,8 @@ export class PaletteMysqlRepository implements PaletteRepository {
     const result = await repo
       .createQueryBuilder()
       .update(PaletteLotTypeormEntity)
-      .set({ quantity: () => `quantity - ${String(quantity)}` })
+      .set({ quantity: () => "quantity - :qty" })
+      .setParameters({ qty: quantity })
       .where("id = :id AND quantity >= :quantity", {
         id: paletteLotId,
         quantity,
@@ -510,6 +526,18 @@ export class PaletteMysqlRepository implements PaletteRepository {
     if (result.affected === 0) {
       throw new StockDeductionFailedError(paletteLotId, quantity);
     }
+  }
+
+  async deductMultiplePaletteLotQuantities(
+    deductions: { paletteLotId: number; quantity: number }[]
+  ): Promise<void> {
+    if (deductions.length === 0) return;
+
+    await this.paletteRepo.manager.transaction(async (manager) => {
+      for (const { paletteLotId, quantity } of deductions) {
+        await this.deductPaletteLotQuantity(paletteLotId, quantity, manager);
+      }
+    });
   }
 
   async getStockWithExpiryByProductIds(productIds: number[]): Promise<
@@ -599,6 +627,16 @@ export class PaletteMysqlRepository implements PaletteRepository {
       .andWhere("palette.createdAt >= :startDate", { startDate })
       .andWhere("palette.createdAt < :endDate", { endDate })
       .getCount();
+  }
+
+  async delete(id: number): Promise<void> {
+    const result = await this.paletteRepo.softDelete({
+      id,
+      deletedAt: IsNull(),
+    });
+    if (result.affected === 0) {
+      throw new PaletteNotFoundError(id);
+    }
   }
 
   private toPaletteEntity(entity: PaletteTypeormEntity): PaletteEntity {

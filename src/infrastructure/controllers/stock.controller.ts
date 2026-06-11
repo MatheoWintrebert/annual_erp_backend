@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   HttpCode,
   HttpStatus,
@@ -19,6 +20,7 @@ import {
 } from "@nestjs/swagger";
 import {
   CheckOnboardingViolationsUseCase,
+  DeletePaletteUseCase,
   GetPalettesUseCase,
   GetPaletteViolationsUseCase,
   UpdatePalettePositionUseCase,
@@ -41,7 +43,8 @@ export class StockController {
     private readonly getPalettesUseCase: GetPalettesUseCase,
     private readonly getPaletteViolationsUseCase: GetPaletteViolationsUseCase,
     private readonly checkOnboardingViolationsUseCase: CheckOnboardingViolationsUseCase,
-    private readonly updatePalettePositionUseCase: UpdatePalettePositionUseCase
+    private readonly updatePalettePositionUseCase: UpdatePalettePositionUseCase,
+    private readonly deletePaletteUseCase: DeletePaletteUseCase
   ) {}
 
   @Get()
@@ -183,5 +186,31 @@ export class StockController {
       positionY: dto.positionY,
       positionZ: dto.positionZ,
     });
+  }
+
+  @Delete(":id")
+  @HttpCode(HttpStatus.NO_CONTENT)
+  @ApiOperation({
+    summary: "Delete a palette",
+    description: "Soft-deletes a palette by ID.",
+  })
+  @ApiParam({
+    name: "id",
+    type: Number,
+    description: "The unique identifier of the palette to delete",
+  })
+  @ApiResponse({
+    status: HttpStatus.NO_CONTENT,
+    description: "Palette deleted successfully",
+  })
+  @ApiResponse({
+    status: HttpStatus.NOT_FOUND,
+    description: createSwaggerErrorCodesDescription([
+      ErrorCode.PALETTE_NOT_FOUND,
+    ]),
+    type: HttpErrorDto,
+  })
+  async deletePalette(@Param("id", ParseIntPipe) id: number): Promise<void> {
+    await this.deletePaletteUseCase.execute({ paletteId: id });
   }
 }

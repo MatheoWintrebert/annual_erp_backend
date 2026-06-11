@@ -74,7 +74,7 @@ describe("CompletePickingListUseCase", () => {
 
     paletteRepository = {
       getPaletteLotsByProductIdsForFefo: jest.fn(),
-      deductPaletteLotQuantity: jest.fn(),
+      deductMultiplePaletteLotQuantities: jest.fn(),
     } as unknown as jest.Mocked<PaletteRepository>;
 
     useCase = new CompletePickingListUseCase(
@@ -120,15 +120,15 @@ describe("CompletePickingListUseCase", () => {
     expect(result.totalItemsSkipped).toBe(0);
     expect(result.deductions).toHaveLength(2);
     expect(result.discrepancies).toHaveLength(0);
-    expect(paletteRepository.deductPaletteLotQuantity).toHaveBeenCalledTimes(2);
-    expect(paletteRepository.deductPaletteLotQuantity).toHaveBeenCalledWith(
-      101,
-      20
-    );
-    expect(paletteRepository.deductPaletteLotQuantity).toHaveBeenCalledWith(
-      102,
-      15
-    );
+    expect(
+      paletteRepository.deductMultiplePaletteLotQuantities
+    ).toHaveBeenCalledTimes(1);
+    expect(
+      paletteRepository.deductMultiplePaletteLotQuantities
+    ).toHaveBeenCalledWith([
+      { paletteLotId: 101, quantity: 20 },
+      { paletteLotId: 102, quantity: 15 },
+    ]);
     expect(pickingListRepository.updateStatus).toHaveBeenCalledWith(
       1,
       PickingListStatus.COMPLETED
@@ -173,11 +173,12 @@ describe("CompletePickingListUseCase", () => {
     expect(result.discrepancies[0].reason).toBe(
       "Item skipped — not found at location"
     );
-    expect(paletteRepository.deductPaletteLotQuantity).toHaveBeenCalledTimes(1);
-    expect(paletteRepository.deductPaletteLotQuantity).toHaveBeenCalledWith(
-      101,
-      20
-    );
+    expect(
+      paletteRepository.deductMultiplePaletteLotQuantities
+    ).toHaveBeenCalledTimes(1);
+    expect(
+      paletteRepository.deductMultiplePaletteLotQuantities
+    ).toHaveBeenCalledWith([{ paletteLotId: 101, quantity: 20 }]);
   });
 
   it("should throw PickingListNotFoundError for non-existent picking list", async () => {
@@ -298,10 +299,9 @@ describe("CompletePickingListUseCase", () => {
     const result = await useCase.execute(input);
 
     expect(result.deductions[0].quantityDeducted).toBe(10);
-    expect(paletteRepository.deductPaletteLotQuantity).toHaveBeenCalledWith(
-      101,
-      10
-    );
+    expect(
+      paletteRepository.deductMultiplePaletteLotQuantities
+    ).toHaveBeenCalledWith([{ paletteLotId: 101, quantity: 10 }]);
     expect(pickingListRepository.updateItems).toHaveBeenCalledWith(1, [
       { id: 1, status: PickingListItemStatus.PICKED, pickedQuantity: 10 },
     ]);
@@ -343,7 +343,9 @@ describe("CompletePickingListUseCase", () => {
     expect(result.totalItemsSkipped).toBe(2);
     expect(result.deductions).toHaveLength(0);
     expect(result.discrepancies).toHaveLength(2);
-    expect(paletteRepository.deductPaletteLotQuantity).not.toHaveBeenCalled();
+    expect(
+      paletteRepository.deductMultiplePaletteLotQuantities
+    ).not.toHaveBeenCalled();
     expect(pickingListRepository.updateStatus).toHaveBeenCalledWith(
       1,
       PickingListStatus.COMPLETED

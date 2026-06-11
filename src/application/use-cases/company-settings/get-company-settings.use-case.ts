@@ -17,7 +17,7 @@ export class GetCompanySettingsUseCase implements QueryUseCase<
     const settings = await this.companySettingsRepository.findFirst();
 
     if (!settings) {
-      throw new NotFoundError("CompanySettings");
+      throw new NotFoundError("CompanySettings not found");
     }
 
     return settings;

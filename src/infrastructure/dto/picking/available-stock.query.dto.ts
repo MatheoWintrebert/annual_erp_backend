@@ -10,12 +10,11 @@ export class AvailableStockQueryDto {
   @IsArray()
   @IsInt({ each: true })
   @Type(() => Number)
-  @Transform(({ value }: { value: unknown }) =>
-    typeof value === "string"
-      ? value.split(",").map(Number)
-      : Array.isArray(value)
-        ? (value as unknown[]).map(Number)
-        : [Number(value)]
-  )
+  @Transform(({ value }: { value: unknown }) => {
+    const toInt = (v: unknown): number => parseInt(String(v).trim(), 10);
+    if (typeof value === "string") return value.split(",").map(toInt);
+    if (Array.isArray(value)) return (value as unknown[]).map(toInt);
+    return [toInt(value)];
+  })
   productIds!: number[];
 }

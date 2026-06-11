@@ -76,12 +76,14 @@ export class PickingListMysqlRepository implements PickingListRepository {
     const itemRepo = this.pickingListRepo.manager.getRepository(
       PickingListItemTypeormEntity
     );
-    for (const item of items) {
-      await itemRepo.update(
-        { id: item.id, pickingListId },
-        { status: item.status, pickedQuantity: item.pickedQuantity }
-      );
-    }
+    await Promise.all(
+      items.map((item) =>
+        itemRepo.update(
+          { id: item.id, pickingListId },
+          { status: item.status, pickedQuantity: item.pickedQuantity }
+        )
+      )
+    );
   }
 
   private toDomain(entity: PickingListTypeormEntity): PickingListEntity {

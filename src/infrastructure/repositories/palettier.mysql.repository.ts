@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { EntityManager, In, Repository } from "typeorm";
+import { EntityManager, In, IsNull, Repository } from "typeorm";
 import { PalettierEntity } from "@domain/entities";
 import { NotFoundError } from "@domain/errors";
 import {
@@ -134,7 +134,7 @@ export class PalettierMysqlRepository implements PalettierRepository {
 
   async countPalettesByPalettierId(id: number): Promise<number> {
     return this.paletteRepository.count({
-      where: { palettierId: id },
+      where: { palettierId: id, deletedAt: IsNull() },
     });
   }
 
