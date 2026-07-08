@@ -2,8 +2,8 @@ import { IUser } from "@domain/types";
 
 export class UserEntity {
   public id!: number;
-  public lastName!: string;
-  public firstName!: string;
+  public lastName!: string | null;
+  public firstName!: string | null;
   public email!: string;
   public password!: string;
   public isActive!: boolean;
@@ -38,8 +38,8 @@ export class UserEntity {
   } {
     return {
       id: this.id,
-      lastName: this.lastName,
-      firstName: this.firstName,
+      lastName: this.lastName || "",
+      firstName: this.firstName || "",
       email: this.email,
       isActive: this.isActive,
       createdAt: this.createdAt,

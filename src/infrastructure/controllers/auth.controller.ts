@@ -10,6 +10,8 @@ import {
 } from "@infrastructure/dto";
 import {
   LoginUseCase,
+  PostCreateUserUseCase,
+  PostEditPasswordUseCase,
   RegisterUseCase,
   VerifyTwoFactorUseCase,
 } from "@application/use-cases";
@@ -17,6 +19,7 @@ import { Auth2FaGuard } from "@infrastructure/guards/auth-2fa.guard";
 import { GetUserInfo, Public } from "@infrastructure/decorators";
 import { IUserInfo } from "@domain/types";
 import { FullLoginUseCase } from "@application/use-cases/auth/full-login";
+import { AuthUserGuard } from "@infrastructure/guards";
 
 @Controller("auth")
 export class AuthController {
@@ -24,7 +27,9 @@ export class AuthController {
     private readonly loginUseCase: LoginUseCase,
     private readonly registerUseCase: RegisterUseCase,
     private readonly verifyTwoFactorUseCase: VerifyTwoFactorUseCase,
-    private readonly fullLoginUseCase: FullLoginUseCase
+    private readonly fullLoginUseCase: FullLoginUseCase,
+    private readonly editPasswordUseCase: PostEditPasswordUseCase,
+    private readonly createUserUseCase: PostCreateUserUseCase,
   ) {}
 
   @Public()
@@ -72,6 +77,32 @@ export class AuthController {
       email: user.email,
       code: body.code,
       secret: user.twoFactorSecret ?? "",
+    });
+    return result;
+  }
+
+  @Post("edit-password")
+  @UseGuards(AuthUserGuard)
+  async editPassword(
+    @GetUserInfo() user: IUserInfo,
+    @Body() body: {oldPassword: string, newPassword: string}
+  ): Promise<void> {
+    const result = await this.editPasswordUseCase.execute({
+      userId: user.id,
+      oldPassword: body.oldPassword,
+      newPassword: body.newPassword
+    });
+    return;
+  }
+
+  @Post("create-user")
+  @UseGuards(AuthUserGuard)
+  async createUser(
+    @GetUserInfo() user: IUserInfo,
+    @Body() body: {email: string}
+  ): Promise<{password: string}> {
+    const result = await this.createUserUseCase.execute({
+      email: body.email
     });
     return result;
   }
