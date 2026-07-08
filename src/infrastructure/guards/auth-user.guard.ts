@@ -29,6 +29,10 @@ export class AuthUserGuard implements CanActivate {
       return true;
     }
 
+    if (protectionContext?.is2Fa) {
+      return true;
+    }
+
     const request: IAuthRequest = context.switchToHttp().getRequest();
     const authorization = request.headers.authorization ?? "";
     const jwtToken = authorization.split(" ")[1];
@@ -39,13 +43,13 @@ export class AuthUserGuard implements CanActivate {
 
     const jwtDecode = this.tokenService.verify(jwtToken, {
       secret: process.env.JWT_SECRET ?? "application",
-    }) as { id: number; email: string } | null;
+    }) as { sub: number; email: string } | null;
     if (!jwtDecode) {
       throw new UnauthorizedException("Invalid token");
     }
 
     const user: IUserInfo | null = await this.getUserUseCase.execute({
-      userId: jwtDecode.id,
+      userId: jwtDecode.sub,
     });
 
     if (!user) {

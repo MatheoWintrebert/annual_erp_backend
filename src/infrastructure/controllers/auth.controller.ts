@@ -1,5 +1,6 @@
 import { Body, Controller, Post, UseGuards } from "@nestjs/common";
 import {
+  EnableTwoFactorResponseDto,
   FullLoginRequestDto,
   LoginRequestDto,
   LoginResponseDto,
@@ -9,14 +10,14 @@ import {
   VerifyTwoFactorResponseDto,
 } from "@infrastructure/dto";
 import {
+  GenerateTwoFactorUseCase,
   LoginUseCase,
-  PostCreateUserUseCase,
   PostEditPasswordUseCase,
   RegisterUseCase,
   VerifyTwoFactorUseCase,
 } from "@application/use-cases";
 import { Auth2FaGuard } from "@infrastructure/guards/auth-2fa.guard";
-import { GetUserInfo, Public } from "@infrastructure/decorators";
+import { GetUserInfo, Public, TwoFactor } from "@infrastructure/decorators";
 import { IUserInfo } from "@domain/types";
 import { FullLoginUseCase } from "@application/use-cases/auth/full-login";
 import { AuthUserGuard } from "@infrastructure/guards";
@@ -29,7 +30,7 @@ export class AuthController {
     private readonly verifyTwoFactorUseCase: VerifyTwoFactorUseCase,
     private readonly fullLoginUseCase: FullLoginUseCase,
     private readonly editPasswordUseCase: PostEditPasswordUseCase,
-    private readonly createUserUseCase: PostCreateUserUseCase,
+    private readonly generateTwoFactorUseCase: GenerateTwoFactorUseCase,
   ) {}
 
   @Public()
@@ -38,6 +39,7 @@ export class AuthController {
     const result = await this.loginUseCase.execute(loginDto);
     return {
       token: result.token,
+      user: result.user,
     };
   }
 
@@ -67,6 +69,7 @@ export class AuthController {
   }
 
   @Post("2fa/verify")
+  @TwoFactor()
   @UseGuards(Auth2FaGuard)
   async verifyTwoFactor(
     @GetUserInfo() user: IUserInfo,
@@ -87,7 +90,7 @@ export class AuthController {
     @GetUserInfo() user: IUserInfo,
     @Body() body: {oldPassword: string, newPassword: string}
   ): Promise<void> {
-    const result = await this.editPasswordUseCase.execute({
+    await this.editPasswordUseCase.execute({
       userId: user.id,
       oldPassword: body.oldPassword,
       newPassword: body.newPassword
@@ -95,15 +98,19 @@ export class AuthController {
     return;
   }
 
-  @Post("create-user")
-  @UseGuards(AuthUserGuard)
-  async createUser(
-    @GetUserInfo() user: IUserInfo,
-    @Body() body: {email: string}
-  ): Promise<{password: string}> {
-    const result = await this.createUserUseCase.execute({
-      email: body.email
+  @Post("2fa/generate")
+  @TwoFactor()
+  @UseGuards(Auth2FaGuard)
+  async generateTwoFactor(
+    @GetUserInfo() user: IUserInfo
+  ): Promise<EnableTwoFactorResponseDto> {
+    const result = await this.generateTwoFactorUseCase.execute({
+      userId: user.id,
+      email: user.email,
     });
-    return result;
+    return {
+      secret: result.secret,
+      qrCodeUrl: result.qrCode,
+    };
   }
 }

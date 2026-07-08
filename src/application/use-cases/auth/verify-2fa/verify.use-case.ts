@@ -10,7 +10,7 @@ export class VerifyTwoFactorUseCase {
   ) {}
 
   async execute(input: IVerifyTwoFactorInput): Promise<IVerifyTwoFactorOutput> {
-    const secret = Secret.fromUtf8(input.secret);
+    const secret = Secret.fromBase32(input.secret);
     const totp = new TOTP({
       account: input.email,
       issuer: "Pallitix",
@@ -20,6 +20,10 @@ export class VerifyTwoFactorUseCase {
     if (!isValid) {
       throw new Error("Invalid 2FA code");
     }
+
+    await this.userRepository.update(input.userId, {
+      isTwoFactorEnabled: true,
+    });
 
     const payload = { email: input.email, sub: input.userId };
     const token = this.jwtService.sign(payload, {

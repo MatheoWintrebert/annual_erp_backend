@@ -1,5 +1,7 @@
 import {
+  GenerateTwoFactorUseCase,
   LoginUseCase,
+  PostEditPasswordUseCase,
   RegisterUseCase,
   VerifyTwoFactorUseCase,
 } from "@application/use-cases";
@@ -43,6 +45,18 @@ export default {
       ): VerifyTwoFactorUseCase =>
         new VerifyTwoFactorUseCase(userRepository, jwtService),
       inject: [UserRepository, JwtService],
+    },
+    {
+      provide: PostEditPasswordUseCase,
+      useFactory: (userRepository: UserRepository): PostEditPasswordUseCase =>
+        new PostEditPasswordUseCase(userRepository),
+      inject: [UserRepository],
+    },
+    {
+      provide: GenerateTwoFactorUseCase,
+      useFactory: (userRepository: UserRepository): GenerateTwoFactorUseCase =>
+        new GenerateTwoFactorUseCase(userRepository),
+      inject: [UserRepository],
     },
   ],
   controllers: [AuthController],

@@ -1,3 +1,3 @@
 export interface CreateUserOutput {
-    password: string;
+  password: string;
 }

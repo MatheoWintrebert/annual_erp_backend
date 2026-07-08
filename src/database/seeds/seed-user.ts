@@ -28,8 +28,8 @@ async function seedUser(): Promise<void> {
     email: "admin@kaori.com",
     password: hashedPassword,
     isActive: true,
-    isTwoFactorEnabled: true,
-    twoFactorSecret: newSecret.toBase32(),
+    isTwoFactorEnabled: false,
+    //twoFactorSecret: newSecret.toBase32(),
   });
 
   await userRepository.save(user);

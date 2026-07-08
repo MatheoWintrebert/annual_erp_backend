@@ -39,13 +39,13 @@ export class Auth2FaGuard implements CanActivate {
 
     const jwtDecode = this.tokenService.verify(jwtToken, {
       secret: process.env.JWT_2FA_SECRET ?? "to2FA",
-    }) as { id: number; email: string } | null;
+    }) as { sub: number; email: string } | null;
     if (!jwtDecode) {
       throw new UnauthorizedException("Invalid token");
     }
 
     const user: IUserInfo | null = await this.getUserUseCase.execute({
-      userId: jwtDecode.id,
+      userId: jwtDecode.sub,
     });
 
     if (!user) {

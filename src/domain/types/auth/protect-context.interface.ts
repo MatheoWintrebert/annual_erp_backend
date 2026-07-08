@@ -1,3 +1,4 @@
 export interface IProtectionContext {
-  isPublic: boolean;
+  isPublic?: boolean;
+  is2Fa?: boolean;
 }

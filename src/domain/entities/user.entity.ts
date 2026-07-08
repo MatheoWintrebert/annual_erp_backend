@@ -2,8 +2,8 @@ import { IUser } from "@domain/types";
 
 export class UserEntity {
   public id!: number;
-  public lastName!: string | null;
-  public firstName!: string | null;
+  public lastName!: string;
+  public firstName!: string;
   public email!: string;
   public password!: string;
   public isActive!: boolean;
@@ -33,6 +33,7 @@ export class UserEntity {
     firstName: string;
     email: string;
     isActive: boolean;
+    isTwoFactorEnabled: boolean;
     createdAt: Date;
     updatedAt: Date;
   } {
@@ -42,6 +43,7 @@ export class UserEntity {
       firstName: this.firstName || "",
       email: this.email,
       isActive: this.isActive,
+      isTwoFactorEnabled: this.isTwoFactorEnabled,
       createdAt: this.createdAt,
       updatedAt: this.updatedAt,
     };
