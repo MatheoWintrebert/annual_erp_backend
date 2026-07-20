@@ -13,7 +13,7 @@ export class VerifyTwoFactorUseCase {
     const secret = Secret.fromBase32(input.secret);
     const totp = new TOTP({
       account: input.email,
-      issuer: "Pallitix",
+      issuer: "PMS",
       secret,
     });
     const isValid = await totp.verify(input.code);

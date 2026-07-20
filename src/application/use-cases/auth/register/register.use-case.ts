@@ -42,7 +42,7 @@ export class RegisterUseCase {
 
     const totp = new TOTP({
       account: existingUser.email,
-      issuer: "Pallitix",
+      issuer: "PMS",
       secret: newSecret,
     });
 

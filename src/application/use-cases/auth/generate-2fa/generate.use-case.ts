@@ -25,7 +25,7 @@ export class GenerateTwoFactorUseCase implements QueryUseCase<
 
         const totp = new TOTP({
             account: input.email,
-            issuer: "Pallitix",
+            issuer: "PMS",
             secret,
         });
 

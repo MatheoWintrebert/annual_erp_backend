@@ -23,7 +23,7 @@ export class FullLoginUseCase {
     const secret = Secret.fromBase32(user.twoFactorSecret ?? "");
     const totp = new TOTP({
       account: input.email,
-      issuer: "Pallitix",
+      issuer: "PMS",
       secret,
     });
     const isValid = await totp.verify(input.code);
