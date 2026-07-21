@@ -5,9 +5,10 @@ import { UserRepository } from "@domain/repositories";
 import { UserEntity } from "@domain/entities";
 
 @Injectable()
-export class PostCreateUserUseCase
-  implements QueryUseCase<CreateUserInput, CreateUserOutput>
-{
+export class PostCreateUserUseCase implements QueryUseCase<
+  CreateUserInput,
+  CreateUserOutput
+> {
   constructor(private readonly userRepository: UserRepository) {}
 
   async execute(input: CreateUserInput): Promise<CreateUserOutput> {

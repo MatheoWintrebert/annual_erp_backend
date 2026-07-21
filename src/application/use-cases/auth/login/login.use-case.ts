@@ -17,7 +17,10 @@ export class LoginUseCase {
     }
     console.log("User password:", user.password);
     console.log("Input password:", await hashPassword(input.password));
-    const isPasswordValid = await comparePassword(input.password, user.password);
+    const isPasswordValid = await comparePassword(
+      input.password,
+      user.password
+    );
     if (!isPasswordValid) {
       throw new UnauthorizedException("Invalid credentials password");
     }

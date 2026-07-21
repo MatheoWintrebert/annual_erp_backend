@@ -30,7 +30,7 @@ export class AuthController {
     private readonly verifyTwoFactorUseCase: VerifyTwoFactorUseCase,
     private readonly fullLoginUseCase: FullLoginUseCase,
     private readonly editPasswordUseCase: PostEditPasswordUseCase,
-    private readonly generateTwoFactorUseCase: GenerateTwoFactorUseCase,
+    private readonly generateTwoFactorUseCase: GenerateTwoFactorUseCase
   ) {}
 
   @Public()
@@ -88,12 +88,12 @@ export class AuthController {
   @UseGuards(AuthUserGuard)
   async editPassword(
     @GetUserInfo() user: IUserInfo,
-    @Body() body: {oldPassword: string, newPassword: string}
+    @Body() body: { oldPassword: string; newPassword: string }
   ): Promise<void> {
     await this.editPasswordUseCase.execute({
       userId: user.id,
       oldPassword: body.oldPassword,
-      newPassword: body.newPassword
+      newPassword: body.newPassword,
     });
     return;
   }

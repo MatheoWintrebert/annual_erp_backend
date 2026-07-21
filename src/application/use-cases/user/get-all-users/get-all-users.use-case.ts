@@ -4,11 +4,14 @@ import { UserRepository } from "@domain/repositories";
 import { GetAllUsersOutput } from ".";
 
 @Injectable()
-export class GetAllUsersUseCase implements QueryUseCase<void, GetAllUsersOutput> {
-    constructor(private readonly userRepository: UserRepository,) {}
+export class GetAllUsersUseCase implements QueryUseCase<
+  void,
+  GetAllUsersOutput
+> {
+  constructor(private readonly userRepository: UserRepository) {}
 
-    async execute(): Promise<GetAllUsersOutput> {
-        const users = await this.userRepository.findAll();
-        return users.map((user) => user.toResponse());
-    }
+  async execute(): Promise<GetAllUsersOutput> {
+    const users = await this.userRepository.findAll();
+    return users.map((user) => user.toResponse());
+  }
 }

@@ -1,2 +1,2 @@
-export * from './edit-password.input';
-export * from './edit-password.use-case';
+export * from "./edit-password.input";
+export * from "./edit-password.use-case";
