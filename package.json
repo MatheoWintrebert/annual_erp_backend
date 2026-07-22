@@ -25,6 +25,7 @@
     "migration:revert": "NODE_ENV=local npx typeorm -- -d ./ormconfig.ts migration:revert",
     "migration:revert:prod": "NODE_ENV=production npx typeorm -- -d ./ormconfig.ts migration:revert",
     "seed:user": "NODE_ENV=local npx ts-node -r tsconfig-paths/register src/database/seeds/seed-user.ts",
+    "seed:demonstration": "NODE_ENV=local npx ts-node -r tsconfig-paths/register src/database/seeds/seed-demonstration.ts",
     "db:reset": "NODE_ENV=local npx ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js schema:drop -d ./ormconfig.ts && npm run migration:run && npm run seed:user"
   },
   "dependencies": {
